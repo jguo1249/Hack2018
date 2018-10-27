@@ -1,6 +1,9 @@
 from twilio.rest import Client
 from dateutil import parser
 
+from ndq.db import TOPIC_LIST
+from ndq.user import get_attribute
+
 
 ###GENERAL INFO###
 
@@ -8,36 +11,15 @@ account_sid = 'ACbbf3703e6d7faeb202cd33629b4708fc'
 auth_token = '534c5bf0bf485062e6fca35218736528'
 client = Client(account_sid, auth_token)
 from_number = '+16147050284'
-all_topics = set(['World','Local','Sports','Science','Food','Entertainment','Politics','Technology'])
 
 
-##########################################HELPER FUNCTIONS######################################
+########################################## HELPER FUNCTIONS ######################################
 def has_number(string):
     words = string.split()
     for i in words:
         if i.isdigit():
             return i
     return None
-
-def get_topics(number):
-    pass
-    #DB stuff
-
-def get_context(number):
-    pass
-    #DB stuff
-
-def get_summary_length(number):
-    pass
-    #DB stuff
-
-def get_delivery_time(number):
-    pass
-    #DB stuff
-
-def get_frequency(number):
-    pass
-    #DB stuff
 
 def remove_topics(number,remove_list):
     pass
@@ -63,7 +45,7 @@ def set_frequency(number,frequency):
     pass
     #DB stuff
 
-############################################MAIN FUNCTIONS######################################
+############################################ MAIN FUNCTIONS ######################################
 
 
 ## Should be accompanied with adding number to db
@@ -71,7 +53,7 @@ def twilio_signup(number):
     try:
         message = client.messages \
             .create(
-                 body='''Welcome to News Done Quick! Thank you for subscribing to our service
+                 body='''Welcome to News Done Quick! Thank you for subscribing to our service.
 
 Text help for options and unsubscribe to unsubscribe.''',
                  from_= from_number,
@@ -100,10 +82,10 @@ def send_data(data,number):
 
 
 ## Need history list with message added into it
-def process_info(message,number):
+def process_info(message, number):
     try:
         message = message.lower()
-        context = get_context(number)
+        context = get_attribute(number, 'context')
 
         if 'help' in message:
             send_data("""What would you like to do?
@@ -114,7 +96,7 @@ def process_info(message,number):
 * Change summary lengths
 * Change topics
 """, number)
-            
+
         elif 'change' in message and 'frequency' in message and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'time' and context != 'summary'):
             send_data('What would you like the new frequency to be (in hours)?',number)
             set_context(number,'frequency')
@@ -122,21 +104,21 @@ def process_info(message,number):
         elif has_number(message) and context == 'frequency':
             set_frequency(number,has_number(message))
             send_data('Your frequency is now set to ' + has_number(message) + ' hours',number)
-            set_context('',number)
+            set_context('', number)
 
         elif 'change' in message and 'time' in message and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'frequency' and context != 'summary'):
             send_data('What would you like the new delivery time to be?',number)
-            set_context('time',number)
+            set_context('time', number)
 
         elif context == 'time':
             try:
                 std_time = parser.parse(message)
                 epoch = std_time.timestamp()
                 set_time(number,epoch)
-                
+
                 send_data('Your deivery time is now set to ' + message,number)
                 set_context(number,'')
-                
+
             except Exception as e:
                 print(e)
                 send_data("I'm sorry but I don't understand the time you have input",number)
@@ -157,18 +139,18 @@ def process_info(message,number):
             except Exception as e:
                 print(e)
                 send_data("I'm sorry but that dosen't make sense",number)
-        
-            
+
+
         elif 'change' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
             send_data('Would you like to add a topic or remove a topic?',number)
             set_context(number,'topics')
 
-            
+
         elif 'add' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
             topics_to_add = '''Which of the following topics would you like to add:
 
 '''
-            remaining = all_topics - topics_set
+            remaining = TOPIC_LIST - topics_set
             if len(remaining)>0:
                 for i in remaining:
                     topics_to_add += '* ' + i + '\n'
@@ -193,7 +175,7 @@ def process_info(message,number):
 
         elif context == 'remove topic':
             remove_list = []
-            for i in all_topics:
+            for i in TOPIC_LIST:
                 if i.lower() in message:
                     remove_list.append(i)
             if len(remove_list)>0:
@@ -202,14 +184,14 @@ def process_info(message,number):
                     data_str += i + ', '
                 data_str = data_str[:-2]
                 send_data(data_str,number)
-                remove_topics(number,remove_list)
+                remove_topics(number,list(TOPIC_LIST-set(remove_list)))
                 set_context(number,'')
             else:
                 send_data("I'm sorry but I don't understand the topics you sent",number)
 
         elif context == 'add topic':
             add_list = []
-            for i in all_topics:
+            for i in TOPIC_LIST:
                 if i.lower() in message:
                     add_list.append(i)
             if len(add_list)>0:
@@ -255,16 +237,3 @@ process_info("Sports, Local",'+16142706290')
 process_info('remove topic','+16142706290')
 process_info("Sports, Local",'+16142706290')
 process_info("unsubscribe",'+16142706290')
-        
-
-    
-
-
-
-
-
-
-
-
-
-

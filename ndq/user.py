@@ -4,18 +4,13 @@ from flask import (
   Blueprint, g, request, url_for
 )
 
-from ndq.db import get_db, TOPICLIST
+from ndq.db import get_db, TOPIC_LIST
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 
 def parse_topics(topics):
-  returned = {}
-  for T in TOPICLIST:
-    if T in topics:
-      returned[T] = True
-    else:
-      returned[T] = False
-  return returned
+  return {t: t in topics for t in TOPIC_LIST}
+
 
 @bp.route('/signup', methods=['POST'])
 def signup():
@@ -47,8 +42,23 @@ def signup():
     db.commit()
   return 200
 
+def get_attribute(phone, attribute):
+  db = get_db()
+  attr = db.execute(
+    'SELECT ? FROM user WHERE phone = ?' # not sure this works #TODO
+    (attribute, phone)
+  )
+  return attr
+
+def set_attribute(phone, attribute):
+  get_db.execute(
+    'UPDATE ? FROM user WHERE phone = ?' # not sure this works #TODO
+    (attribute, phone)
+  )
+
 def change_topics(phone, new_topics):
   new_topics = parse_topics(new_topics)
+  db = get_db()
 
   db.execute(
     'UPDATE user SET (world, local, sports, science, food, entertainment, politics, technology) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ) WHERE phone = ?', # almost positive this won't work #TODO
@@ -59,6 +69,7 @@ def change_topics(phone, new_topics):
   db.commit()
 
 def unsubscribe(phone):
+  db = get_db()
   db.execute(
     'DELETE user WHERE phone = ?', # not sure that this will work #TODO
     (phone)
@@ -66,6 +77,7 @@ def unsubscribe(phone):
   db.commit()
 
 def change_frequency(phone, frequency):
+  db = get_db()
   db.execute(
     'UPDATE user SET (frequency) VALUES (?) WHERE phone = ?', # almost positive this won't work #TODO
     (frequency, phone)
@@ -73,8 +85,9 @@ def change_frequency(phone, frequency):
   db.commit()
 
 def change_delivery_time(phone, time):
-   db.execute(
-     'UPDATE user SET (firstDelivery) VALUES (?) WHERE phone = ?', # almost positive this won't work #TODO
-     (time, phone)
-   )
-   db.commit()
+  db = get_db()
+  db.execute(
+    'UPDATE user SET (firstDelivery) VALUES (?) WHERE phone = ?', # almost positive this won't work #TODO
+    (time, phone)
+  )
+  db.commit()
