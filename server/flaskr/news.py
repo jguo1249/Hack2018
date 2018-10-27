@@ -31,7 +31,7 @@ def me():
     (topics)
   ).fetchall()
 
-  render_template('me.html', articles=articles)
+  return render_template('me.html', articles=articles)
 
 @bp.route('/')
 def index():
@@ -41,7 +41,7 @@ def index():
     'SELECT * FROM article'
   )
 
-  render_template('index.html', articles=articles)
+  return render_template('index.html', articles=articles)
 
 @bp.route('/god', methods=['POST'])
 def god():
