@@ -9,6 +9,7 @@ import requests
 from bs4 import BeautifulSoup
 from newspaper import Article
 import time
+import re
 
 SENTENCE_COUNT = 8
 SOURCES = dict()
@@ -50,13 +51,16 @@ SOURCES['World'] = [
     'https://www.wsj.com/news/world', 'https://www.foxnews.com/world'
 ]
 
+TAGS = ['headline', 'article']
 
+
+## Parse Article - Helpers
 # Headline
 def format_headline(headline):
     return headline.title()
 
 
-# Summary
+# Summary - Helper
 def clean_sentence(sentence):
     clean_sentence = sentence
     removal_list = ['•', '\n', '\t', '(CNN)']
@@ -66,6 +70,7 @@ def clean_sentence(sentence):
     return clean_sentence
 
 
+# Summary
 def summarize(text):
     parser = PlaintextParser.from_string(text, Tokenizer('english'))
     summarizer = Summarizer(Stemmer('english'))
@@ -93,7 +98,7 @@ def format_authors(authors):
     return result[:-1]
 
 
-# Parse
+## Parse Article
 def parse_article(url, topic):
     article = Article(url)
     article.download()
@@ -110,16 +115,9 @@ def parse_article(url, topic):
 
     return result
 
-# Get URLs
-def obtain_news_sources(topic):
 
-    for source in SOURCES[topic]:
-
-    soup = BeautifulSoup()
-
-    return sources
-
-
+## Parse News Sources - Helpers
+# Get HTML
 def get_html(url):
     response = requests.get(url)
 
@@ -137,11 +135,33 @@ def get_html(url):
     return html or ''
 
 
+## Parse News Sources
+def parse_news_sources(topic):
+    articles = []
+
+    for source in SOURCES[topic]:
+        html = get_html(source)
+        soup = BeautifulSoup(html, 'lxml')
+
+        for tag in TAGS:
+            regex = re.compile('.*' + tag + '.*', re.IGNORECASE)
+
+            for block in soup.find_all(attrs={'class': regex}):
+                for sub_block in block.find_all('a', href=True):
+                    url = sub_block['href']
+                    if url != None:
+                        if url != 
+                        articles.append(sub_block['href'])
+
+    for article in articles:
+
+
+    return articles
+
+
 def main():
-    sources = obtain_news_sources('')
+    sources = parse_news_sources('World')
     return
 
 
-parse_article(
-    'https://www.cnn.com/2018/10/27/us/pittsburgh-synagogue-active-shooter/index.html',
-    '')
+main()
