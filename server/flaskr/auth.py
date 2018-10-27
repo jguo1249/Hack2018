@@ -9,9 +9,6 @@ from flaskr.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.before_app_request #runs before the app request no matter which view
-
-
 def login_required(view):
   @functools.wraps(view)
   def wrapped_view(**kwargs):
@@ -22,6 +19,7 @@ def login_required(view):
 
   return wrapped_view
   
+@bp.before_app_request #runs before the app request no matter which view
 def load_logged_in_user():
   user_id = session.get('user_id')
 
