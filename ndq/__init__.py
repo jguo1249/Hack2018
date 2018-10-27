@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 
+from ndq.twilio_functions import process_info
 
 def create_app(test_config=None):
     # create and configure the app
@@ -24,9 +25,21 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @bp.route('/god', methods=['POST'])
+    @app.route('/god', methods=['POST'])
     def god():
-      pass
+      if request.method == 'POST':
+        from_number = request.form['From']
+        body = request.form['Body']
+
+        try:
+          process_info(body, from_number)
+          return 200
+        except:
+          return 500
+      else:
+        return 404
+
+
 
     from . import db
     db.init_app(app) #init db

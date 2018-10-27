@@ -99,16 +99,16 @@ def process_info(message, number):
 
         elif 'change' in message and 'frequency' in message and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'time' and context != 'summary'):
             send_data('What would you like the new frequency to be (in hours)?',number)
-            set_context(number,'frequency')
+            set_attribute(number, 'context', 'frequency')
 
         elif has_number(message) and context == 'frequency':
             set_frequency(number,has_number(message))
             send_data('Your frequency is now set to ' + has_number(message) + ' hours',number)
-            set_context('', number)
+            set_attribute(number, 'context', '')
 
         elif 'change' in message and 'time' in message and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'frequency' and context != 'summary'):
             send_data('What would you like the new delivery time to be?',number)
-            set_context('time', number)
+            set_attribute(number, 'context', 'time')
 
         elif context == 'time':
             try:
@@ -222,6 +222,7 @@ Could we start over?""",number)
 
 
 #Testing
+'''
 twilio_signup('+16142706290')
 process_info('help','+16142706290')
 process_info('change frequency','+16142706290')
@@ -237,3 +238,4 @@ process_info("Sports, Local",'+16142706290')
 process_info('remove topic','+16142706290')
 process_info("Sports, Local",'+16142706290')
 process_info("unsubscribe",'+16142706290')
+'''
