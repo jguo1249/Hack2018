@@ -45,6 +45,7 @@ def signup():
        topics["entertainment"], topics["politics"], topics["technology"], frequency, firstDelivery)
     )
     db.commit()
+  return 200
 
 def change_topics(phone, new_topics):
   new_topics = parse_topics(new_topics)

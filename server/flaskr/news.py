@@ -43,7 +43,7 @@ def index():
 
   render_template('index.html', articles=articles)
 
-@bp.route('/god', methods=('POST'))
+@bp.route('/god', methods=['POST'])
 def god():
   pass
 
