@@ -55,7 +55,9 @@ SOURCES['world'] = [
 ]
 
 TAGS = ['headline', 'article']
-BAD_TAGS = ['video', 'fool', 'comparecards', 'bleacherreport', 'lendingtree']
+BAD_TAGS = [
+    'video', 'fool', 'comparecards', 'bleacherreport', 'lendingtree', 'tmz'
+]
 
 
 ## Parse Article - Helpers
@@ -142,8 +144,13 @@ def get_html(url):
     return html or ''
 
 
+# Cluster
+def cluster(urls, number):
+    return urls
+
+
 ## Parse News Sources
-def parse_news_sources(topic):
+def parse_news_sources(topic, number):
     urls = []
 
     for source in SOURCES[topic]:
@@ -168,9 +175,7 @@ def parse_news_sources(topic):
         return True
 
     urls[:] = [url for url in urls if is_valid(url)]
-
-    #temp to speed things up
-    urls = urls[0:10]
+    urls = cluster(urls, number)
 
     result = []
     for url in urls:
@@ -181,9 +186,7 @@ def parse_news_sources(topic):
 
 
 def main():
-    sources = parse_news_sources('world')
-    for source in sources:
-        print(source)
+    sources = parse_news_sources('entertainment', 1)
     return
 
 
