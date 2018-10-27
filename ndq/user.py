@@ -1,7 +1,7 @@
 import functools
 
 from flask import (
-  Blueprint, g, request, url_for
+  Blueprint, g, request, redirect, url_for, Response
 )
 
 from ndq.db import get_db, TOPIC_LIST
@@ -15,7 +15,7 @@ def parse_topics(topics):
 @bp.route('/signup', methods=['POST'])
 def signup():
   phone = request.form['phone']
-  topics = request.form['topics']
+  topics = request.form['topics[]']
   frequency = request.form['frequency']
   firstDelivery = request.form['firstDelivery']
 
@@ -24,8 +24,6 @@ def signup():
 
   if not phone:
     error = 'Phone number is required.'
-  elif not password:
-    error = 'Password is required.'
   elif db.execute(
     'SELECT id FROM user WHERE phone = ?', (phone,)
   ).fetchone() is not None:
@@ -35,12 +33,16 @@ def signup():
     topics = parse_topics(topics)
     db.execute(
       'INSERT INTO user (phone, world, local, sports, science, food, entertainment, politics, technology, context, frequency, firstDelivery) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
-      (username, topics["world"], topics["local"],
+      (phone, topics["world"], topics["local"],
        topics["sports"], topics["science"], topics["food"],
-       topics["entertainment"], topics["politics"], topics["technology"], frequency, firstDelivery)
+       topics["entertainment"], topics["politics"], topics["technology"], '', frequency, firstDelivery)
     )
     db.commit()
-  return 200
+
+  topic_param = topics
+  print('/me?topics=' + topic_param)
+
+  return redirect('/me?topics=' + topic_param)
 
 def get_attribute(phone, attribute):
   db = get_db()

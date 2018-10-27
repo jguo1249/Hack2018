@@ -23,12 +23,18 @@ def topic(topic):
 def me():
   db = get_db()
 
-  topics = request.args.get('topic').split(',')
+  topics = request.args.get('topics').split(',')
 
-  temp = db.execute(
-    'SELECT * FROM article WHERE topic IN ?'
-    ' ORDER BY topic ASC',
-    (topics)
+  print(topics)
+
+  query = 'SELECT * FROM article WHERE'
+  query += ' topic = \'' + topics[0]
+  query += '\''
+
+  print(query)
+
+  articles = db.execute(
+     query
   ).fetchall()
   return render_template('me.html', articles=articles)
 
