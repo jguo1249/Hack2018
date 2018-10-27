@@ -1,4 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
-  <p> "index" </p>
+  <form action="/user/signup" method="post">
+
+    Phone:
+    <input type = "text" name = "phone" required>
+
+    <legend>Choose your topics...</legend>
+    <div>
+      <input type="checkbox" name="topics[]" value="world">
+      <label for="world">World</label>
+
+      <input type="checkbox" name="topics[]" value="local">
+      <label for="local">Local</label>
+
+      <input type="checkbox" name="topics[]" value="sports">
+      <label for="sports">Sports</label>
+
+      <input type="checkbox" name="topics[]" value="science">
+      <label for="science">Science</label>
+
+      <input type="checkbox" name="topics[]" value="food">
+      <label for="food">Food</label>
+
+      <input type="checkbox" name="topics[]" value="entertainment">
+      <label for="entertainment">Entertainment</label>
+
+      <input type="checkbox" name="topics[]" value="politics">
+      <label for="politics">Politics</label>
+
+      <input type="checkbox" name="topics[]" value="technology">
+      <label for="technology">Technology</label>
+    </div>
+
+    <legend>And how often you want the news!</legend>
+    <div>
+      <input type = "checkbox" name = "frequency" value="8hr">
+      <label for="8hr">every 8 hrs</label>
+
+      <input type = "checkbox" name = "frequency" value="24hr">
+      <label for="24hr">Daily</label>
+
+      <input type = "checkbox" name = "frequency" value="168hr">
+      <label for="168hr">Weekly</label>
+    </div>
+
+    <legend>When do you want your first issue?</legend>
+    <select required>
+      <option value="now">Now</option>
+      <option value="saab">Saab</option>
+      <option value="opel">Opel</option>
+      <option value="audi">Audi</option>
+    </select>
+
+    <input type="submit" value="Sign up!">
+  </form>
 {% endblock %}

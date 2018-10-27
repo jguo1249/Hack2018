@@ -25,12 +25,11 @@ def me():
 
   topics = request.args.get('topic').split(',')
 
-  articles = db.execute(
+  temp = db.execute(
     'SELECT * FROM article WHERE topic IN ?'
     ' ORDER BY topic ASC',
     (topics)
   ).fetchall()
-
   return render_template('me.html', articles=articles)
 
 @bp.route('/')
