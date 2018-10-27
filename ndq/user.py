@@ -5,6 +5,7 @@ from flask import (
 )
 
 from ndq.db import get_db, TOPIC_LIST
+from ndq.twilio_functions import twilio_signup
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 
@@ -38,10 +39,10 @@ def signup():
        topics["entertainment"], topics["politics"], topics["technology"], '', frequency, firstDelivery)
     )
     db.commit()
+    twilio_signup(phone)
+
 
   topic_param = topics
-  print('/me?topics=' + topic_param)
-
   return redirect('/me?topics=' + topic_param)
 
 def get_attribute(phone, attribute):
