@@ -1,4 +1,9 @@
 {% extends "base.html" %}
+
+{%block header%}
+  <h1>NDQ: News</h1>
+{% endblock %}
+
 {% block content %}
 
 <form action="/user/signup" method="post">
@@ -69,7 +74,7 @@
             </div>
           </div>
         </header>
-        <img src={{article['imglink']}} alt="Italian Trulli">
+        <img src={{article['imglink']}}>
         <p class="body">{{ article['body'] }}</p>
       </article>
 

@@ -1,4 +1,31 @@
 {% extends 'base.html' %}
+
+{%block header%}
+  <h1>NDQ: {{topic}}<h1>
+{% endblock %}
+
 {% block content %}
-  <p> "topic" </p>
+  <p>im in topic </p>
+  {% for article in articles %}
+
+      <article class = "article">
+        <header>
+          <div>
+            <h1>{{article["headline"]}}</h1>
+            <div class = "credits">
+              <a href={{article["link"]}}>
+                by {{article["author"]}}
+              </a>
+            </div>
+          </div>
+        </header>
+        <img src={{article['imglink']}}>
+        <p class="body">{{ article['body'] }}</p>
+      </article>
+
+    {% if not loop.last %}
+      <hr>
+    {% endif %}
+
+  {% endfor %}
 {% endblock %}
