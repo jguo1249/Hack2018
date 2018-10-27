@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, request, Response
 
 from ndq.twilio_functions import process_info
 
@@ -25,10 +25,20 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @bp.route('/god', methods=['POST'])
+    @app.route('/god', methods=['POST'])
     def god():
       if request.method == 'POST':
-        print(request)
+        from_number = request.form['From']
+        body = request.form['Body']
+        print(body)
+        try:
+          process_info(body, from_number)
+          return Response(status=200)
+        except:
+          return Response(status=500)
+      else:
+        return Response(status=404)
+
 
 
     from . import db
