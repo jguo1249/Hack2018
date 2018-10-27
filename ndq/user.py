@@ -42,5 +42,7 @@ def signup():
     twilio_signup(phone)
 
 
-  topic_param = topics
-  return redirect('/me?topics=' + topic_param)
+    topic_param = topics
+    return redirect('/me?topics=' + topic_param)
+  else:
+    pass

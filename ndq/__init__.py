@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask
+from flask import Flask, request, Response
 
 from ndq.twilio_functions import process_info
 
@@ -30,14 +30,14 @@ def create_app(test_config=None):
       if request.method == 'POST':
         from_number = request.form['From']
         body = request.form['Body']
-
+        print(body)
         try:
           process_info(body, from_number)
-          return 200
+          return Response(status=200)
         except:
-          return 500
+          return Response(status=500)
       else:
-        return 404
+        return Response(status=404)
 
 
 
