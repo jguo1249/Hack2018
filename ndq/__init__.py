@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 
+from ndq.twilio_functions import process_info
 
 def create_app(test_config=None):
     # create and configure the app
@@ -26,7 +27,9 @@ def create_app(test_config=None):
 
     @bp.route('/god', methods=['POST'])
     def god():
-      pass
+      if request.method == 'POST':
+        print(request)
+
 
     from . import db
     db.init_app(app) #init db
