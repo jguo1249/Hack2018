@@ -17,7 +17,7 @@ def parse_topics(topics):
       returned[T] = False
   return returned
 
-@bp.route('/signup', methods=('POST'))
+@bp.route('/signup', methods=['POST'])
 def signup():
   phone = request.form['phone']
   topics = request.form['topics']

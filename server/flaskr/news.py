@@ -3,10 +3,9 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from flaskr.auth import login_required
 from flaskr.db import get_db
 
-bp = Blueprint('blog', __name__)
+bp = Blueprint('news', __name__)
 
 @bp.route('/about')
 def about():
@@ -46,7 +45,7 @@ def index():
 
 @bp.route('/god', methods=('POST'))
 def god():
-  
+  pass
 
 def get_post(id, check_author=True):
   post = get_db().execute(
@@ -65,8 +64,7 @@ def get_post(id, check_author=True):
   return post
 
 
-@bp.route('/<int:id>/update', methods=('GET', 'POST'))
-@login_required
+@bp.route("/<int:id>/update", methods=["GET", "POST"])
 def update(id):
   post = get_post(id)
 
@@ -92,8 +90,7 @@ def update(id):
 
   return render_template('blog/update.html', post=post)
 
-@bp.route('/<int:id>/delete', methods=('POST',))
-@login_required
+@bp.route('/<int:id>/delete', methods=["POST"])
 def delete(id):
   get_post(id)
   db = get_db()
