@@ -4,7 +4,7 @@ from flask import (
   Blueprint, g, request, url_for
 )
 
-from flaskr.db import get_db, TOPICLIST
+from ndq.db import get_db, TOPICLIST
 
 bp = Blueprint('user', __name__, url_prefix='/user')
 

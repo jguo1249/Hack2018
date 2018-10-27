@@ -3,7 +3,7 @@ from flask import (
 )
 from werkzeug.exceptions import abort
 
-from flaskr.db import get_db
+from ndq.db import get_db
 
 bp = Blueprint('news', __name__)
 
