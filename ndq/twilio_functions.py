@@ -1,8 +1,7 @@
 from twilio.rest import Client
 from dateutil import parser
 
-from ndq.db import TOPIC_LIST
-from ndq.user import get_attribute
+from ndq.db import TOPIC_LIST, get_attribute
 
 
 ###GENERAL INFO###

@@ -32,6 +32,57 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+def get_attribute(phone, attribute):
+  db = get_db()
+  attr = db.execute(
+    'SELECT ? FROM user WHERE phone = ?' # not sure this works #TODO
+    (attribute, phone)
+  )
+  return attr
+
+def set_attribute(phone, attribute):
+  get_db.execute(
+    'UPDATE ? FROM user WHERE phone = ?' # not sure this works #TODO
+    (attribute, phone)
+  )
+
+def change_topics(phone, new_topics):
+  new_topics = parse_topics(new_topics)
+  db = get_db()
+
+  db.execute(
+    'UPDATE user SET (world, local, sports, science, food, entertainment, politics, technology) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ) WHERE phone = ?', # almost positive this won't work #TODO
+    (topics["world"], topics["local"],
+     topics["sports"], topics["science"], topics["food"],
+     topics["entertainment"], topics["politics"], topics["technology"], phone)
+  )
+  db.commit()
+
+def unsubscribe(phone):
+  db = get_db()
+  db.execute(
+    'DELETE user WHERE phone = ?', # not sure that this will work #TODO
+    (phone)
+  )
+  db.commit()
+
+def change_frequency(phone, frequency):
+  db = get_db()
+  db.execute(
+    'UPDATE user SET (frequency) VALUES (?) WHERE phone = ?', # almost positive this won't work #TODO
+    (frequency, phone)
+  )
+  db.commit()
+
+def change_delivery_time(phone, time):
+  db = get_db()
+  db.execute(
+    'UPDATE user SET (firstDelivery) VALUES (?) WHERE phone = ?', # almost positive this won't work #TODO
+    (time, phone)
+  )
+  db.commit()
+
+
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
