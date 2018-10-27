@@ -1,0 +1,4 @@
+include ndq/schema.sql
+graft ndq/static
+graft ndq/templates
+global-exclude *.pyc
