@@ -28,7 +28,16 @@ def create_app(test_config=None):
     @bp.route('/god', methods=['POST'])
     def god():
       if request.method == 'POST':
-        print(request)
+        from_number = request.form['From']
+        body = request.form['Body']
+
+        try:
+          process_info(body, from_number)
+          return 200
+        except:
+          return 500
+
+
 
 
     from . import db
