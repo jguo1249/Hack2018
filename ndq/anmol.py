@@ -11,42 +11,45 @@ from newspaper import Article
 import time
 import re
 
+SUMMARIZER = Summarizer(Stemmer('english'))
+SUMMARIZER.stop_words = get_stop_words('english')
+
 SENTENCE_COUNT = 8
 SOURCES = dict()
-SOURCES['Entertainment'] = [
+SOURCES['entertainment'] = [
     'https://www.cnn.com/entertainment',
     'https://www.nytimes.com/section/t-magazine/entertainment',
     'https://www.foxnews.com/entertainment',
 ]
-SOURCES['Food'] = [
+SOURCES['food'] = [
     'https://www.cnn.com/travel/food-and-drink',
     'https://www.nytimes.com/section/food',
     'https://www.wsj.com/news/life-arts/food-cooking-drink',
     'https://www.foxnews.com/food-drink'
 ]
-SOURCES['Local'] = ['https://www.foxnews.com/search-results/search?q=columbus']
-SOURCES['Politics'] = [
+SOURCES['local'] = ['https://www.foxnews.com/search-results/search?q=columbus']
+SOURCES['politics'] = [
     'https://www.cnn.com/politics', 'https://www.nytimes.com/section/politics',
     'https://www.wsj.com/news/politics', 'https://www.foxnews.com/politics'
 ]
-SOURCES['Science'] = [
+SOURCES['science'] = [
     'https://www.cnn.com/specials/space-science',
     'https://www.nytimes.com/section/science',
     'https://www.wsj.com/news/science', 'https://www.foxnews.com/science'
 ]
-SOURCES['Sports'] = [
+SOURCES['sports'] = [
     'https://edition.cnn.com/sport', 'https://www.nytimes.com/section/sports',
     'https://www.wsj.com/news/life-arts/sports',
     'https://www.foxnews.com/search-results/search?q=sports'
 ]
-SOURCES['Technology'] = [
+SOURCES['technology'] = [
     'https://www.cnn.com/business/tech',
     'https://www.nytimes.com/section/technology',
     'https://www.wsj.com/news/technology',
     'https://www.foxbusiness.com/category/technology',
     'https://www.foxnews.com/tech'
 ]
-SOURCES['World'] = [
+SOURCES['world'] = [
     'https://www.cnn.com/world', 'https://www.nytimes.com/section/world',
     'https://www.wsj.com/news/world', 'https://www.foxnews.com/world'
 ]
@@ -74,11 +77,9 @@ def clean_sentence(sentence):
 # Summary
 def summarize(text):
     parser = PlaintextParser.from_string(text, Tokenizer('english'))
-    summarizer = Summarizer(Stemmer('english'))
-    summarizer.stop_words = get_stop_words('english')
 
     result = ''
-    for sentence in summarizer(parser.document, SENTENCE_COUNT):
+    for sentence in SUMMARIZER(parser.document, SENTENCE_COUNT):
         result += clean_sentence(str(sentence)) + " "
     return result.strip()
 
@@ -118,7 +119,8 @@ def parse_article(url, topic):
         return result
 
     except Exception as e:
-        pass
+        print(url + ' failed')
+        return None
 
 
 ## Parse News Sources - Helpers
@@ -142,7 +144,7 @@ def get_html(url):
 
 ## Parse News Sources
 def parse_news_sources(topic):
-    articles = []
+    urls = []
 
     for source in SOURCES[topic]:
         html = get_html(source)
@@ -156,25 +158,30 @@ def parse_news_sources(topic):
                     url = sub_block['href']
                     if url != None:
                         if 'http' not in url:
-                            url = source + url
-                        articles.append(url)
+                            url = source[0:source.index('.com') + 4] + url
+                        urls.append(url)
 
-    # Clean articles
-    # temp_articles = articles.copy()
-    # del articles[:]
-    # for article in temp_articles:
-    #     for tag in BAD_TAGS:
-    #         if tag not in article:
-    #             articles.append(article)
+    def is_valid(url):
+        for tag in BAD_TAGS:
+            if tag in url:
+                return False
+        return True
+
+    urls[:] = [url for url in urls if is_valid(url)]
+
+    #temp to speed things up
+    urls = urls[0:10]
 
     result = []
-    for article in articles:
-        result.append(parse_article(article, topic))
+    for url in urls:
+        article = parse_article(url, topic)
+        if article is not None:
+            result.append(article)
     return result
 
 
 def main():
-    sources = parse_news_sources('World')
+    sources = parse_news_sources('world')
     for source in sources:
         print(source)
     return
