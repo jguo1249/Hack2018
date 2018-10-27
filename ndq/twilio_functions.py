@@ -29,7 +29,7 @@ def add_topics(number,add_list):
     pass
     #DB stuff
 
-def set_context(number,context):
+def set_attribute(number,context):
     pass
     #DB stuff
 
@@ -117,7 +117,7 @@ def process_info(message, number):
                 set_time(number,epoch)
 
                 send_data('Your deivery time is now set to ' + message,number)
-                set_context(number,'')
+                set_attribute(number, 'context', '')
 
             except Exception as e:
                 print(e)
@@ -125,7 +125,7 @@ def process_info(message, number):
 
         elif 'change' in message and ('summary' in message or 'length' in message) and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'time' and context != 'frequency'):
             send_data('How many sentences would you like the summary to contain? (maximum 8)',number)
-            set_context(number,'summary')
+            set_attribute(number, 'context', 'summary')
 
         elif context == 'summary':
             try:
@@ -133,7 +133,7 @@ def process_info(message, number):
                 if num_sentences <= 8:
                     set_summary_length(number,has_number(message))
                     send_data('Your summary length is now set to ' + has_number(message) + ' sentences',number)
-                    set_context(number,'')
+                    set_attribute(number, 'context', '')
                 elif num_sentences > 8:
                     send_data('A maximum of 8 sentences is allowed',number)
             except Exception as e:
@@ -143,7 +143,7 @@ def process_info(message, number):
 
         elif 'change' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
             send_data('Would you like to add a topic or remove a topic?',number)
-            set_context(number,'topics')
+            set_attribute(number, 'context', 'topics')
 
 
         elif 'add' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
@@ -155,7 +155,7 @@ def process_info(message, number):
                 for i in remaining:
                     topics_to_add += '* ' + i + '\n'
                 topics_to_add = topics_to_add
-                set_context(number,'add topic')
+                set_attribute(number, 'context', 'add topic')
             else:
                 topics_to_add = 'You are currently subscribed to all topics'
             send_data(topics_to_add,number)
@@ -168,7 +168,7 @@ def process_info(message, number):
                 for i in topics_set:
                     topics_to_remove += '* ' + i + '\n'
                 topics_to_remove = topics_to_remove
-                set_context(number,'remove topic')
+                set_attribute(number, 'context', 'remove topic')
             else:
                 topics_to_remove = 'You are currently subscribed to zero topics'
             send_data(topics_to_remove,number)
@@ -185,7 +185,7 @@ def process_info(message, number):
                 data_str = data_str[:-2]
                 send_data(data_str,number)
                 remove_topics(number,list(TOPIC_LIST-set(remove_list)))
-                set_context(number,'')
+                set_attribute(number, 'context', '')
             else:
                 send_data("I'm sorry but I don't understand the topics you sent",number)
 
@@ -201,18 +201,18 @@ def process_info(message, number):
                 data_str = data_str[:-2]
                 send_data(data_str,number)
                 add_topics(number,add_list)
-                set_context(number,'')
+                set_attribute(number, 'context', '')
             else:
                 send_data("I'm sorry but I don't understand the topics you sent",number)
 
         elif 'unsubscribe' in message:
-            set_context(number,'unsubscribed')
+            set_attribute(number, 'context', 'unsubscribed')
             send_data("We're sorry to see you go",number)
 
         else:
             send_data("""I'm sorry but I'm a little lost right now.
 Could we start over?""",number)
-            set_context(number,'')
+            set_attribute(number, 'context', '')
 
         return {"success":"true"}
 
