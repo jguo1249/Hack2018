@@ -101,20 +101,24 @@ def format_authors(authors):
 
 ## Parse Article
 def parse_article(url, topic):
-    article = Article(url)
-    article.download()
-    article.parse()
+    try:
+        article = Article(url)
+        article.download()
+        article.parse()
 
-    result = dict()
-    result['headline'] = format_headline(article.title)
-    result['body'] = summarize(article.text)
-    result['link'] = url
-    result['topic'] = topic
-    result['published'] = format_published(article.publish_date)
-    result['author'] = format_authors(article.authors)
-    result['image'] = article.top_image
+        result = dict()
+        result['headline'] = format_headline(article.title)
+        result['body'] = summarize(article.text)
+        result['link'] = url
+        result['topic'] = topic
+        result['published'] = format_published(article.publish_date)
+        result['author'] = format_authors(article.authors)
+        result['image'] = article.top_image
 
-    return result
+        return result
+
+    except Exception as e:
+        pass
 
 
 ## Parse News Sources - Helpers
@@ -163,7 +167,10 @@ def parse_news_sources(topic):
     #         if tag not in article:
     #             articles.append(article)
 
-    return articles
+    result = []
+    for article in articles:
+        result.append(parse_article(article, topic))
+    return result
 
 
 def main():
