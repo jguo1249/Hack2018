@@ -52,6 +52,7 @@ SOURCES['World'] = [
 ]
 
 TAGS = ['headline', 'article']
+BAD_TAGS = ['video', 'fool', 'comparecards', 'bleacherreport', 'lendingtree']
 
 
 ## Parse Article - Helpers
@@ -150,17 +151,25 @@ def parse_news_sources(topic):
                 for sub_block in block.find_all('a', href=True):
                     url = sub_block['href']
                     if url != None:
-                        if url != 
-                        articles.append(sub_block['href'])
+                        if 'http' not in url:
+                            url = source + url
+                        articles.append(url)
 
-    for article in articles:
-
+    # Clean articles
+    # temp_articles = articles.copy()
+    # del articles[:]
+    # for article in temp_articles:
+    #     for tag in BAD_TAGS:
+    #         if tag not in article:
+    #             articles.append(article)
 
     return articles
 
 
 def main():
     sources = parse_news_sources('World')
+    for source in sources:
+        print(source)
     return
 
 
