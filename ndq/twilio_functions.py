@@ -83,10 +83,12 @@ def send_data(data,number):
 
 ## Need history list with message added into it
 def process_info(message, number):
+    print('I am in process info')
     try:
         message = message.lower()
+        print(message)
         context = get_attribute(number, 'context')
-
+        print(context)
         if 'help' in message:
             send_data("""What would you like to do?
 
@@ -146,7 +148,7 @@ def process_info(message, number):
             set_attribute(number, 'context', 'topics')
 
 
-        elif 'add' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
+        elif 'add' in message and context != 'frequency' and context != 'time' and context != 'summary':
             topics_to_add = '''Which of the following topics would you like to add:
 
 '''
@@ -160,7 +162,7 @@ def process_info(message, number):
                 topics_to_add = 'You are currently subscribed to all topics'
             send_data(topics_to_add,number)
 
-        elif 'remove' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
+        elif 'remove' in message and context != 'frequency' and context != 'time' and context != 'summary':
             topics_to_remove = '''Which of the following topics would you like to remove:
 
 '''
