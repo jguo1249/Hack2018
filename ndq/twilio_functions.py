@@ -49,6 +49,7 @@ def set_frequency(number,frequency):
 
 ## Should be accompanied with adding number to db
 def twilio_signup(number):
+    print('I am in 2130')
     try:
         message = client.messages \
             .create(
