@@ -34,17 +34,15 @@ def init_db():
 
 def get_attribute(phone, attribute):
   db = get_db()
-  attr = db.execute(
-    'SELECT ? FROM user WHERE phone = ?' # not sure this works #TODO
-    (attribute, phone)
-  )
+  query = 'SELECT {} FROM user WHERE phone = {}'.format(attribute, phone)
+  attr = db.execute(query).fetchone()
   return attr
 
-def set_attribute(phone, attribute):
-  get_db.execute(
-    'UPDATE ? FROM user WHERE phone = ?' # not sure this works #TODO
-    (attribute, phone)
-  )
+def set_attribute(phone, attribute, value):
+  query = 'UPDATE user SET {} = {} WHERE phone = {}'.format(attribute, value, phone)
+  db = get_db()
+  db.execute(query)
+  db.commit()
 
 def change_topics(phone, new_topics):
   new_topics = parse_topics(new_topics)
