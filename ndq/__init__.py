@@ -25,7 +25,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    @bp.route('/god', methods=['POST'])
+    @app.route('/god', methods=['POST'])
     def god():
       if request.method == 'POST':
         from_number = request.form['From']
@@ -36,7 +36,8 @@ def create_app(test_config=None):
           return 200
         except:
           return 500
-
+      else:
+        return 404
 
 
 
