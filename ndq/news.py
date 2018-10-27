@@ -42,10 +42,6 @@ def index():
 
   return render_template('index.html', articles=articles)
 
-@bp.route('/god', methods=['POST'])
-def god():
-  pass
-
 def get_post(id, check_author=True):
   post = get_db().execute(
     'SELECT p.id, title, body, created, author_id, username'

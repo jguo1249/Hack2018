@@ -24,6 +24,9 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    @bp.route('/god', methods=['POST'])
+    def god():
+      pass
 
     from . import db
     db.init_app(app) #init db
