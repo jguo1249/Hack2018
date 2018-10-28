@@ -14,7 +14,7 @@ CREATE TABLE user (
   technology BOOLEAN NOT NULL,
   context TEXT,
   firstDelivery TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  frequency TEXT NOT NULL DEFAULT "24h"
+  frequency TEXT NOT NULL DEFAULT "24"
 );
 
 CREATE TABLE article (
@@ -24,6 +24,6 @@ CREATE TABLE article (
   headline TEXT NOT NULL,
   body TEXT NOT NULL,
   link TEXT NOT NULL,
-  author TEXT NOT NULL,
-  imglink TEXT
+  author TEXT,
+  imglink TEXT,
 );

@@ -1,9 +1,11 @@
 import re
+import string
 import time
 
 import nltk
 import requests
 from bs4 import BeautifulSoup
+from dateutil import parser
 from newspaper import Article
 from sumy.nlp.stemmers import Stemmer
 from sumy.nlp.tokenizers import Tokenizer
@@ -71,6 +73,10 @@ BAD_TAGS.add('lendingtree')
 BAD_TAGS.add('tmz')
 BAD_TAGS.add('foxnews.com/category')
 
+TRANSLATION_TABLE = str.maketrans(
+    string.punctuation + string.ascii_uppercase,
+    " " * len(string.punctuation) + string.ascii_lowercase)
+
 
 ## Parse Article - Helpers
 # Headline
@@ -98,12 +104,26 @@ def summarize(text):
     return result.strip()
 
 
+# Date
+def format_date(date_time):
+    if date_time is not None:
+        result = str(parser.parse(str(date_time)))
+        return result[0:-6]
+    else:
+        return None
+
+
 # Authors
 def format_authors(authors):
     result = ''
+
     for author in authors:
         result += author + ','
-    return result[:-1]
+
+    if result == '':
+        return None
+    else:
+        return result[:-1]
 
 
 ## Parse Article
@@ -118,7 +138,7 @@ def parse_article(url, topic):
         result['body'] = summarize(article.text)
         result['link'] = url
         result['topic'] = topic
-        result['published'] = article.publish_date
+        result['published'] = format_date(article.publish_date)
         result['author'] = format_authors(article.authors)
         result['image'] = article.top_image
 
@@ -149,9 +169,64 @@ def get_html(url):
     return html or ''
 
 
+# Cluster - Helper
+def document_distance(a, b):
+    def get_words(text):
+        text = text.translate(TRANSLATION_TABLE)
+        word_list = text.split()
+        return word_list
+
+    def count_frequency(word_list):
+        freq_mapping = {}
+        for new_word in word_list:
+            if new_word in freq_mapping:
+                freq_mapping[new_word] = freq_mapping[new_word] + 1
+            else:
+                freq_mapping[new_word] = 1
+        return freq_mapping
+
+    def dot_product(a, b):
+        sum = 0.0
+        for key in a:
+            if key in b:
+                sum += a[key] * b[key]
+        return sum
+
+    a_word_list = get_words(a)
+    a_freq_mapping = count_frequency(a_word_list)
+    b_word_list = get_words(b)
+    b_freq_mapping = count_frequency(b_word_list)
+
+    numerator = inner_product(a_freq_mapping, b_freq_mapping)
+    denominator = math.sqrt(
+        inner_product(a_freq_mapping, b_freq_mapping) * inner_product(
+            a_freq_mapping, b_freq_mapping))
+    distance = math.acos(numerator / denominator)
+    return distance
+
+
 # Cluster
 def cluster(articles, num_articles_wanted):
-    return articles
+    valid_articles = []
+    for article in articles:
+        if article['headline'] and article['body']:
+            valid_articles.append(article)
+
+    if len(valid_articles) <= num_articles_wanted:
+        return valid_articles
+
+    # pivot = valid_articles[0]
+    #
+    # x = []
+    # for article in valid_articles[1:]:
+    #     x.append(document_distance(pivot['headline'], article['headline']))
+    #
+    #
+    # y = []
+    # for article in valid_articles[1:]
+    #     y.append(document_distance(pivot['body'], article['body']))
+
+    return valid_articles[0:num_articles_wanted]
 
 
 ## Parse News Sources
@@ -195,11 +270,15 @@ def parse_news_sources(topic, num_articles_wanted, total_articles_to_consider):
 
 def main():
     start = time.time()
-    sources = parse_news_sources('local', 5, 50)
+    sources = parse_news_sources('world', 5, 50)
     end = time.time()
     print(str(end - start) + ' elapsed')
 
     for source in sources:
-        print(source['link'])
+        for key in source:
+            print(source[key])
 
     return
+
+
+# main()
