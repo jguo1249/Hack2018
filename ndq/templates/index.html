@@ -5,188 +5,196 @@
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/index.css">
-<div class="container">
 
-  {% for article in articles %}
-  {% if loop.first %}
-  <div class="row">
-    <div class="col-lg-2">
-    </div>
-    <div class="col-lg-8">
-      <article class="article">
-        <header>
-          <div>
-            <h2>{{article["headline"]}}</h2>
-            <div class="credits">
-              <a href="{{ article['link'] }}" class="article-link">
-                {% if article['author'] %}
-                By {{ article['author'] }}
-                {% endif %}
-              </a>
-              <a href="{{ '/{}'.format(article['topic']) }}" class="article-link">
-                #{{ article['topic'] }}
-              </a>
-            </div>
-          </div>
-        </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
-        <p class="body">{{ article['body'] }}</p>
-      </article>
-    </div>
-    <div class="col-lg-2">
-    </div>
+{% for article in articles %}
+{% if loop.first %}
+<div class="row">
+  <div class="col-lg-2">
   </div>
-  <div class="row">
-    <div class="col-lg-3"></div>
-    <div class="col-lg-6" align="center">
-      <h2>Sign up to get news delivered to your hands.</h2>
-      <form action="/user/signup" method="post">
-        <input type="text" name="phone" required placeholder="Phone Number">
-        <legend>Choose your topics of interest.</legend>
-        <div class="row">
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="world">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="world">
-              <span id="">World</span>
-            </label>
-          </div>
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="local">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="local">
-              <span>Local</span>
-            </label>
-          </div>
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="sports">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="sports">
-              <span>Sports</span>
-            </label>
-          </div>
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="science">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="science">
-              <span>Science</span>
-            </label>
-          </div>
-
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="food">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="food">
-              <span>Food</span>
-            </label>
-          </div>
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="entertainment">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="entertainment">
-              <span>Entertainment</span>
-            </label>
-          </div>
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="politics">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="politics">
-              <span>Politics</span>
-            </label>
-          </div>
-          <div class="ck-button col-6 col-sm-4 col-md-3" id="technology">
-            <label>
-              <input class="hidden" type="checkbox" name="topics[]" value="technology">
-              <span>Tech</span>
-            </label>
+  <div class="col-lg-8">
+    <article class="article">
+      <header>
+        <div>
+          <h2>{{article["headline"]}}</h2>
+          <div class="credits">
+            <a href="{{ article['link'] }}" class="article-link">
+              {% if article['author'] %}
+              By {{ article['author'] }}
+              {% endif %}
+            </a>
+            <a href="{{ '/{}'.format(article['topic']) }}" class="article-link">
+              #{{ article['topic'] }}
+            </a>
           </div>
         </div>
-        <div class="row">
-          <div class="col">
-            <legend class="frequency_select_legend">How often do you want the news?</legend>
-          </div>
-        </div>
-        <div class="row">
-          <label class="col-sm radio-container"> 8 hrs
-            <input type="radio" name="frequency" value="8">
-            <span class="checkmark"></span>
-          </label>
-
-          <label class="col-sm radio-container"> Daily
-            <input type="radio" name="frequency" value="24">
-            <span class="checkmark"></span>
-          </label>
-
-          <label class="col-sm radio-container"> Weekly
-            <input type="radio" name="frequency" value="168">
-            <span class="checkmark"></span>
-          </label>
-        </div>
-        <div class="row">
-          <div class="col">
-            <legend>When do you want your first issue?</legend>
-          </div>
-        </div>
-        <div class="row">
-          <label class="col-sm radio-container"> 9:00 AM
-            <input type="radio" name="firstDelivery" value="2000-01-01 09:00:00">
-            <span class="checkmark"></span>
-          </label>
-
-          <label class="col-sm radio-container"> 12:00 PM
-            <input type="radio" name="firstDelivery" value="2000-01-01 12:00:00">
-            <span class="checkmark"></span>
-          </label>
-
-          <label class="col-sm radio-container"> 7:00 PM
-            <input type="radio" name="firstDelivery" value="2000-01-01 19:00:00">
-            <span class="checkmark"></span>
-          </label>
-        </div>
-
-        <p>Don't worry, you can change all of this later.</p>
-        <input type="submit" value="Sign up!">
-      </form>
-    </div>
-    <div class="col-lg-3"></div>
+      </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
+      <p class="body">{{ article['body'] }}</p>
+    </article>
   </div>
-  {% endif %}
+  <div class="col-lg-2">
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-3"></div>
+  <div class="col-lg-6" align="center">
+    <h2>Sign up to get news delivered to your hands.</h2>
+    <form action="/user/signup" method="post">
+      <input type="text" name="phone" required placeholder="Phone Number">
+      <legend>Choose your topics of interest.</legend>
+      <div class="row">
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="world">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="world">
+            <span id="">World</span>
+          </label>
+        </div>
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="local">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="local">
+            <span>Local</span>
+          </label>
+        </div>
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="sports">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="sports">
+            <span>Sports</span>
+          </label>
+        </div>
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="science">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="science">
+            <span>Science</span>
+          </label>
+        </div>
+
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="food">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="food">
+            <span>Food</span>
+          </label>
+        </div>
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="entertainment">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="entertainment">
+            <span>Entertainment</span>
+          </label>
+        </div>
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="politics">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="politics">
+            <span>Politics</span>
+          </label>
+        </div>
+        <div class="ck-button col-6 col-sm-4 col-md-3" id="technology">
+          <label>
+            <input class="hidden" type="checkbox" name="topics[]" value="technology">
+            <span>Tech</span>
+          </label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <legend class="frequency_select_legend">How often do you want the news?</legend>
+        </div>
+      </div>
+      <div class="row">
+        <label class="col-sm radio-container"> 8 hrs
+          <input type="radio" name="frequency" value="8">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="col-sm radio-container"> Daily
+          <input type="radio" name="frequency" value="24">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="col-sm radio-container"> Weekly
+          <input type="radio" name="frequency" value="168">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+      <div class="row">
+        <div class="col">
+          <legend>When do you want your first issue?</legend>
+        </div>
+      </div>
+      <div class="row">
+        <label class="col-sm radio-container"> 9:00 AM
+          <input type="radio" name="firstDelivery" value="2000-01-01 09:00:00">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="col-sm radio-container"> 12:00 PM
+          <input type="radio" name="firstDelivery" value="2000-01-01 12:00:00">
+          <span class="checkmark"></span>
+        </label>
+
+        <label class="col-sm radio-container"> 7:00 PM
+          <input type="radio" name="firstDelivery" value="2000-01-01 19:00:00">
+          <span class="checkmark"></span>
+        </label>
+      </div>
+
+      <p>Don't worry, you can change all of this later.</p>
+      <input type="submit" value="Sign up!">
+    </form>
+  </div>
+  <div class="col-lg-3"></div>
+</div>
+{% endif %}
 
 
 
-  {% if not loop.first %}
-  <div class="row">
-    <div class="col-lg-2">
-    </div>
-    <div class="col-lg-8">
-      <article class="article">
-        <header>
-          <div>
-            <h2>{{article["headline"]}}</h2>
-            <div class="credits">
-              <a href="{{ article['link'] }}" class="article-link">
-                {% if article['author'] %}
-                By {{ article['author'] }}
-                {% endif %}
-              </a>
-              <a href="{{ '/{}'.format(article['topic']) }}" class="article-link">
-                #{{ article['topic'] }}
-              </a>
-            </div>
+{% if not loop.first %}
+<div class="row">
+  <div class="col-lg-2">
+  </div>
+  <div class="col-lg-8">
+    <article class="article">
+      <header>
+        <div>
+          <h2>{{article["headline"]}}</h2>
+          <div class="credits">
+            <a href="{{ article['link'] }}" class="article-link">
+              {% if article['author'] %}
+              By {{ article['author'] }}
+              {% endif %}
+            </a>
+            <a href="{{ '/{}'.format(article['topic']) }}" class="article-link">
+              #{{ article['topic'] }}
+            </a>
           </div>
-        </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
-        <p class="body">{{ article['body'] }}</p>
-      </article>
-    </div>
-    <div class="col-lg-2">
-    </div>
+        </div>
+      </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
+      <p class="body">{{ article['body'] }}</p>
+    </article>
   </div>
-  {% endif %}
-
-  {% if not loop.last %}
-  <div class="row">
-    <div class="col-lg-2">
-    </div>
-    <div class="col-lg-8">
-      <hr>
-    </div>
-    <div class="col-lg-2">
-    </div>
+  <div class="col-lg-2">
   </div>
-  {% endif %}
+</div>
+{% endif %}
 
-  {% endfor %}
+{% if not loop.last %}
+<div class="row">
+  <div class="col-lg-2">
+  </div>
+  <div class="col-lg-8">
+    <hr>
+  </div>
+  <div class="col-lg-2">
+  </div>
+</div>
+{% endif %}
+
+{% endfor %}
+<div class="row">
+  <div class="col-sm-2"></div>
+  <div class="col-sm-8" align="center">
+    <hr />
+    <a href="{{ url_for('news.about')}}">About</a>
+    <br />
+    <br />
+  </div>
+  <div class="col-sm-2"></div>
 </div>
 {% endblock %}

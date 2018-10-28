@@ -6,9 +6,11 @@
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
 <section class="content">
-  <header>
-    <a id="about-link" href="/about">About</a>
-    <div class="container">
+  <div class="container">
+    <a class="d-none d-md-block about-link" id="about-link" href="{{ url_for('news.about')}}">About</a>
+    <header>
+
+
       <div class="row">
         <div class="col-sm-2"></div>
         <div class="col-sm-8 d-none d-md-block">
@@ -22,31 +24,32 @@
           <hr />
         </div>
         <div class="col-sm-8 d-block d-md-none">
-          <a href="/" id="header-link">
-            <div id="header-container">
+
+          <div id="header-container">
+            <a href="/" id="header-link">
               <img src="{{ url_for('static', filename='resources/dark-logo.png') }}" class="header-image" />
-            </div>
-            <hr />
-          </a>
+            </a>
+          </div>
+          <hr />
+
         </div>
         <div class="col-sm-2" align="right">
 
         </div>
       </div>
+    </header>
+    {% for message in get_flashed_messages() %}
+    <div class="row">
+      <div class="col-sm-4"></div>
+      <div class="col-sm-4" align="center">
+        <div class="flash">{{ message }}</div>
+        <hr />
+        <br />
+      </div>
+      <div class="col-sm-4"></div>
     </div>
-  </header>
-  {% for message in get_flashed_messages() %}
-  <div class="row">
-    <div class="col-sm-4"></div>
-    <div class="col-sm-4" align="center">
-      <div class="flash">{{ message }}</div>
-      <hr />
-      <br />
-    </div>
-    <div class="col-sm-4"></div>
+    {% endfor %}
+    {% block content %}
+    {% endblock %}
   </div>
-  {% endfor %}
-  {% block content %}
-  {% endblock %}
-
 </section>
