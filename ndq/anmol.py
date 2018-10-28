@@ -80,6 +80,7 @@ BAD_TAGS.add('foxnews.com/category')
 BAD_AUTHORS = set()
 BAD_AUTHORS.add('Google')
 BAD_AUTHORS.add(' Wsj.Com')
+BAD_AUTHORS.add('Reporter For Fox News')
 
 BAD_SUMMARY_WORDS = set()
 BAD_SUMMARY_WORDS.add('•')
