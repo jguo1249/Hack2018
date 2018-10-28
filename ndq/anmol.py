@@ -76,6 +76,18 @@ BAD_TAGS.add('lendingtree')
 BAD_TAGS.add('tmz')
 BAD_TAGS.add('foxnews.com/category')
 
+BAD_AUTHORS = set()
+BAD_AUTHORS.add('Google')
+BAD_AUTHORS.add(' Wsj.Com')
+
+BAD_SUMMARY_WORDS = set()
+BAD_SUMMARY_WORDS.add('•')
+BAD_SUMMARY_WORDS.add('\n')
+BAD_SUMMARY_WORDS.add('\t')
+BAD_SUMMARY_WORDS.add('(CNN)')
+BAD_SUMMARY_WORDS.add('Read More')
+BAD_SUMMARY_WORDS.add('_')
+
 TRANSLATION_TABLE = str.maketrans(
     string.punctuation + string.ascii_uppercase,
     " " * len(string.punctuation) + string.ascii_lowercase)
@@ -90,9 +102,9 @@ def format_headline(headline):
 # Summary - Helper
 def clean_sentence(sentence):
     clean_sentence = sentence
-    removal_list = ['•', '\n', '\t', '(CNN)', 'Read More', '_']
-    for item in removal_list:
+    for item in BAD_SUMMARY_WORDS:
         clean_sentence = clean_sentence.replace(item, '')
+    clean_sentence = clean_sentence.replace('...', '')
     clean_sentence = clean_sentence.strip()
     return clean_sentence
 
@@ -111,7 +123,11 @@ def summarize(text):
 def format_date(date_time):
     if date_time is not None:
         result = str(parser.parse(str(date_time)))
-        return result[0:-6]
+
+        if len(result) > 19:
+            result = result[0:-6]
+
+        return result
     else:
         return None
 
@@ -121,7 +137,8 @@ def format_authors(authors):
     result = ''
 
     for author in authors:
-        result += author + ','
+        if not any(substring in author for substring in BAD_AUTHORS):
+            result += author + ','
 
     if result == '':
         return None
@@ -304,7 +321,7 @@ def main():
     for source in sources:
         for key in source:
             print(key + ' - ' + str(source[key]))
-        print("\n\n")
+        print("\n")
     return
 
 
