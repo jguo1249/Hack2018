@@ -1,11 +1,10 @@
 from twilio.rest import Client
 from dateutil import parser
 
-from ndq.db import TOPIC_LIST, get_attribute
+from ndq.db import TOPIC_LIST, get_attribute, set_attribute, get_topics, change_topics
 
 
 ###GENERAL INFO###
-
 account_sid = 'ACbbf3703e6d7faeb202cd33629b4708fc'
 auth_token = '534c5bf0bf485062e6fca35218736528'
 client = Client(account_sid, auth_token)
@@ -20,36 +19,11 @@ def has_number(string):
             return i
     return None
 
-def remove_topics(number,remove_list):
-    pass
-    #DB stuff
-
-def add_topics(number,add_list):
-    pass
-    #DB stuff
-
-def set_attribute(number,context):
-    pass
-    #DB stuff
-
-def set_summary_length(number,length):
-    pass
-    #DB stuff
-
-def set_delivery_time(number,epoch_time):
-    pass
-    #DB stuff
-
-def set_frequency(number,frequency):
-    pass
-    #DB stuff
-
 ############################################ MAIN FUNCTIONS ######################################
 
 
 ## Should be accompanied with adding number to db
 def twilio_signup(number):
-    print('I am in 2130')
     try:
         message = client.messages \
             .create(
@@ -60,6 +34,7 @@ Text help for options and unsubscribe to unsubscribe.''',
                  to = number
              )
         print(message.sid)
+        print(get_attribute(number,'context'))
         return {"success":"true"}
     except Exception as e:
         print(e)
@@ -82,12 +57,10 @@ def send_data(data,number):
 
 
 ## Need history list with message added into it
-def process_info(message, number):
-    print('I am in process info')
+def process_info(message, number, db):
     try:
         message = message.lower()
-        print(message)
-        context = get_attribute(number, 'context')
+        context = get_attribute(number, 'context', db)
         print(context)
         if 'help' in message:
             send_data("""What would you like to do?
@@ -95,7 +68,6 @@ def process_info(message, number):
 * My current settings
 * Change frequency
 * Change delivery time
-* Change summary lengths
 * Change topics
 """, number)
 
@@ -104,7 +76,7 @@ def process_info(message, number):
             set_attribute(number, 'context', 'frequency')
 
         elif has_number(message) and context == 'frequency':
-            set_frequency(number,has_number(message))
+            set_attribute(number,'frequency',has_number(message))
             send_data('Your frequency is now set to ' + has_number(message) + ' hours',number)
             set_attribute(number, 'context', '')
 
@@ -116,32 +88,33 @@ def process_info(message, number):
             try:
                 std_time = parser.parse(message)
                 epoch = std_time.timestamp()
-                set_time(number,epoch)
+                set_attribute(number,'firstDelivery',epoch)
 
-                send_data('Your deivery time is now set to ' + message,number)
+                send_data('Your deivery time is now set to ' + message, number)
                 set_attribute(number, 'context', '')
 
             except Exception as e:
                 print(e)
                 send_data("I'm sorry but I don't understand the time you have input",number)
 
-        elif 'change' in message and ('summary' in message or 'length' in message) and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'time' and context != 'frequency'):
-            send_data('How many sentences would you like the summary to contain? (maximum 8)',number)
-            set_attribute(number, 'context', 'summary')
 
-        elif context == 'summary':
-            try:
-                num_sentences = int(has_number(message))
-                if num_sentences <= 8:
-                    set_summary_length(number,has_number(message))
-                    send_data('Your summary length is now set to ' + has_number(message) + ' sentences',number)
-                    set_attribute(number, 'context', '')
-                elif num_sentences > 8:
-                    send_data('A maximum of 8 sentences is allowed',number)
-            except Exception as e:
-                print(e)
-                send_data("I'm sorry but that dosen't make sense",number)
 
+        #elif 'change' in message and ('summary' in message or 'length' in message) and (context != 'topics' and context != 'add topic' and context != 'remove topic' and context != 'time' and context != 'frequency'):
+        #    send_data('How many sentences would you like the summary to contain? (maximum 8)',number)
+        #    set_attribute(number, 'context', 'summary')
+
+        #elif context == 'summary':
+        #    try:
+        #       num_sentences = int(has_number(message))
+        #        if num_sentences <= 8:
+        #            set_summary_length(number,has_number(message))
+        #            send_data('Your summary length is now set to ' + has_number(message) + ' sentences',number)
+        #            set_attribute(number, 'context', '')
+        #        elif num_sentences > 8:
+        #            send_data('A maximum of 8 sentences is allowed',number)
+        #    except Exception as e:
+        #        print(e)
+        #        send_data("I'm sorry but that dosen't make sense",number)
 
         elif 'change' in message and 'topic' in message and context != 'frequency' and context != 'time' and context != 'summary':
             send_data('Would you like to add a topic or remove a topic?',number)
@@ -152,12 +125,12 @@ def process_info(message, number):
             topics_to_add = '''Which of the following topics would you like to add:
 
 '''
-            remaining = TOPIC_LIST - topics_set
+            remaining = TOPIC_LIST - set(get_topics(number))
             if len(remaining)>0:
                 for i in remaining:
                     topics_to_add += '* ' + i + '\n'
-                topics_to_add = topics_to_add
                 set_attribute(number, 'context', 'add topic')
+                print('Context',get_attribute(number,'context'))
             else:
                 topics_to_add = 'You are currently subscribed to all topics'
             send_data(topics_to_add,number)
@@ -166,10 +139,10 @@ def process_info(message, number):
             topics_to_remove = '''Which of the following topics would you like to remove:
 
 '''
+            topics_set = set(get_topics(number))
             if len(topics_set)>0:
                 for i in topics_set:
                     topics_to_remove += '* ' + i + '\n'
-                topics_to_remove = topics_to_remove
                 set_attribute(number, 'context', 'remove topic')
             else:
                 topics_to_remove = 'You are currently subscribed to zero topics'
@@ -186,7 +159,7 @@ def process_info(message, number):
                     data_str += i + ', '
                 data_str = data_str[:-2]
                 send_data(data_str,number)
-                remove_topics(number,list(TOPIC_LIST-set(remove_list)))
+                change_topics(number,list(TOPIC_LIST-set(remove_list)))
                 set_attribute(number, 'context', '')
             else:
                 send_data("I'm sorry but I don't understand the topics you sent",number)
@@ -202,7 +175,7 @@ def process_info(message, number):
                     data_str += i + ', '
                 data_str = data_str[:-2]
                 send_data(data_str,number)
-                add_topics(number,add_list)
+                change_topics(number,add_list)
                 set_attribute(number, 'context', '')
             else:
                 send_data("I'm sorry but I don't understand the topics you sent",number)

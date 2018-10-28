@@ -37,12 +37,25 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
+def get_attribute(phone, attribute, db):
+  print(db)
+  print(db == get_db()) # need to test
+  print(db is get_db()) # need to test
+  db.execute('SELECT * FROM user WHERE phone = ?', (phone,))
+  attr = db.fetchone()
+  print(attr)
 
-def get_attribute(phone, attribute):
-    db = get_db()
-    query = 'SELECT {} FROM user WHERE phone = {}'.format(attribute, phone)
-    attr = db.execute(query).fetchone()
-    return attr
+  return attr
+
+def get_topics(phone):
+  db = get_db()
+  query = 'SELECT * FROM user WHERE phone = {}'.format(phone)
+  attr = db.execute(query).fetchall()
+  ls = []
+  for cols in attr:
+    if attr[cols] == 'True':
+     ls.append(cols)
+  return ls
 
 
 def set_attribute(phone, attribute, value):
@@ -51,7 +64,6 @@ def set_attribute(phone, attribute, value):
     db = get_db()
     db.execute(query)
     db.commit()
-
 
 def change_topics(phone, new_topics):
     new_topics = parse_topics(new_topics)
@@ -70,22 +82,6 @@ def unsubscribe(phone):
     db.execute(
         'DELETE user WHERE phone = ?',  # not sure that this will work #TODO
         (phone))
-    db.commit()
-
-
-def change_frequency(phone, frequency):
-    db = get_db()
-    db.execute(
-        'UPDATE user SET (frequency) VALUES (?) WHERE phone = ?',  # almost positive this won't work #TODO
-        (frequency, phone))
-    db.commit()
-
-
-def change_delivery_time(phone, time):
-    db = get_db()
-    db.execute(
-        'UPDATE user SET (firstDelivery) VALUES (?) WHERE phone = ?',  # almost positive this won't work #TODO
-        (time, phone))
     db.commit()
 
 

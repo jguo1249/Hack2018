@@ -3,6 +3,7 @@ import os
 from flask import Flask, request, Response
 
 from ndq.twilio_functions import process_info
+from ndq.db import get_db
 
 def create_app(test_config=None):
     # create and configure the app
@@ -30,9 +31,10 @@ def create_app(test_config=None):
       if request.method == 'POST':
         from_number = request.form['From']
         body = request.form['Body']
+        db = get_db()
         print(body)
         try:
-          process_info(body, from_number)
+          process_info(body, from_number, db)
           return Response(status=200)
         except:
           return Response(status=500)
