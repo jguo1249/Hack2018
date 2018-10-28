@@ -1,31 +1,57 @@
 {% extends 'base.html' %}
 
 {%block header%}
-  <h1>NDQ: {{topic}}<h1>
+<h1>
+  NDQ: {{topic}}
+</h1>
 {% endblock %}
 
 {% block content %}
-  <p>im in topic </p>
+<link rel="stylesheet" type="text/css" href="../static/index.css">
+
+<div class="container">
+  <div class="row">
+    <div class="col-lg-4"></div>
+    <div class="col-lg-4" align="center">
+      <h1>{{ topic }}</h1>
+      <hr />
+      <br />
+    </div>
+    <div class="col-lg-4"></div>
+  </div>
   {% for article in articles %}
 
-      <article class = "article">
+  <div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8">
+      <article class="article">
         <header>
           <div>
-            <h1>{{article["headline"]}}</h1>
-            <div class = "credits">
-              <a href={{article["link"]}}>
-                by {{article["author"]}}
+            <h2>{{article["headline"]}}</h2>
+            <div class="credits">
+              <a href="{{ article['link'] }}" class="article-link">
+                {% if article['author'] %}
+                By {{ article['author'] }}
+                {% endif %}
+              </a>
+              <a href="{{ '/news.{}'.format(article['topic']) }}" class="article-link">
+                #{{ article['topic'] }}
               </a>
             </div>
           </div>
-        </header>
-        <img src={{article['imglink']}}>
+        </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
         <p class="body">{{ article['body'] }}</p>
       </article>
+    </div>
+    <div class="col-lg-2">
+    </div>
+  </div>
 
-    {% if not loop.last %}
-      <hr>
-    {% endif %}
+  {% if not loop.last %}
+  <hr>
+  {% endif %}
 
   {% endfor %}
+</div>
 {% endblock %}

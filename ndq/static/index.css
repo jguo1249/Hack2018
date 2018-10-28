@@ -20,6 +20,10 @@ form {
   margin: 1em;
 }
 
+.article-link {
+  display: block;
+}
+
 .body {
   line-height: 2em;
   font-size: 1.1em;

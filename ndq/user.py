@@ -1,4 +1,5 @@
 import functools
+import datetime
 
 from flask import Blueprint, Response, flash, g, redirect, request, url_for
 
@@ -14,6 +15,7 @@ def signup():
     topics = request.form['topics[]']
     frequency = request.form['frequency']
     firstDelivery = request.form['firstDelivery']
+    firstDelivery = datetime.datetime.now() 
 
     db = get_db()
     error = None

@@ -18,15 +18,17 @@
           <div>
             <h2>{{article["headline"]}}</h2>
             <div class="credits">
-              <a href="{{ article['link'] }}">
+              <a href="{{ article['link'] }}" class="article-link">
                 {% if article['author'] %}
-                by {{ ', '.join(article['author'].split(',')) }}
+                By {{ article['author'] }}
                 {% endif %}
+              </a>
+              <a href="{{ '/{}'.format(article['topic']) }}" class="article-link">
+                #{{ article['topic'] }}
               </a>
             </div>
           </div>
-        </header>
-        <img src="{{ article['imglink'] }}" class="img-fluid article-img">
+        </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
         <p class="body">{{ article['body'] }}</p>
       </article>
     </div>
@@ -154,15 +156,17 @@
           <div>
             <h2>{{article["headline"]}}</h2>
             <div class="credits">
-              <a href="{{ article['link'] }}">
+              <a href="{{ article['link'] }}" class="article-link">
                 {% if article['author'] %}
-                by {{ article['author'] }}
+                By {{ article['author'] }}
                 {% endif %}
+              </a>
+              <a href="{{ '/{}'.format(article['topic']) }}" class="article-link">
+                #{{ article['topic'] }}
               </a>
             </div>
           </div>
-        </header>
-        <img src="{{ article['imglink'] }}" class="img-fluid article-img">
+        </header> <img src="{{ article['imglink'] }}" class="img-fluid article-img">
         <p class="body">{{ article['body'] }}</p>
       </article>
     </div>

@@ -14,7 +14,6 @@ h1 {
   height: 4em;
   display: inline;
   vertical-align: middle;
-  margin-right: 12px;
 }
 
 #header-container {
@@ -22,6 +21,21 @@ h1 {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-top: 1em;
+  text-decoration: none;
+  color: black;
+}
+
+#header-link:hover {
+  text-decoration: none;
+  color: black;
+}
+
+#header-divider {
+  height: 4em;
+  width: 3px;
+  background-color: black;
+  margin: 16px;
 }
 
 .flash {
