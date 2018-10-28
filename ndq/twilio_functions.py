@@ -1,10 +1,9 @@
 from dateutil import parser
 from twilio.rest import Client
 
-from ndq.db import (TOPIC_LIST, change_topics, get_attribute, get_topics,
-                    set_attribute)
+from ndq.db import (TOPIC_LIST, change_topics, get_attribute, get_me_link,
+                    get_topics, set_attribute)
 from ndq.news import get_top_news
-from ndq.user import get_me_link
 
 ###GENERAL INFO###
 account_sid = 'ACd9c542d7461b9e067c58b356354c9e86'

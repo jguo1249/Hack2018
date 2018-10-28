@@ -55,16 +55,3 @@ def signup():
 
     flash(error)
     return redirect(url_for('news.index'))
-
-
-def get_me_link(phone):
-    user = get_db().execute('SELECT * FROM user WHERE phone = ?',
-                            (phone, )).fetchone()
-
-    topics = []
-
-    for key in user.keys():
-        topics.append(user[key])
-
-    return 'http://www.newsdonequick.online{}'.format(
-        url_for('news.me', topics=','.join(topics)).replace('%2C', ','))

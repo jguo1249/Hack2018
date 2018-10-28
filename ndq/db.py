@@ -94,6 +94,19 @@ def unsubscribe(phone):
     db.commit()
 
 
+def get_me_link(phone):
+    user = get_db().execute('SELECT * FROM user WHERE phone = ?',
+                            (phone, )).fetchone()
+
+    topics = []
+
+    for key in user.keys():
+        topics.append(user[key])
+
+    return 'http://www.newsdonequick.online{}'.format(
+        url_for('news.me', topics=','.join(topics)).replace('%2C', ','))
+
+
 @click.command('init-db')
 @with_appcontext
 def init_db_command():
