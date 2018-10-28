@@ -2,7 +2,7 @@ from dateutil import parser
 from twilio.rest import Client
 
 from ndq.db import (TOPIC_LIST, change_topics, get_attribute, get_me_link,
-                    get_topics, set_attribute)
+                    get_topics, set_attribute, unsubscribe)
 from ndq.news import get_top_news
 
 ###GENERAL INFO###
@@ -243,6 +243,7 @@ def process_info(message, number):
         elif 'unsubscribe' in message:
             set_attribute(number, 'context', 'unsubscribed')
             send_data("We're sorry to see you go", number)
+            unsubscribe(number)
 
         else:
             send_data(
