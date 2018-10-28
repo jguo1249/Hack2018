@@ -69,6 +69,25 @@ def update_articles():
     return Response(status=200)
 
 
+@bp.route('/update-articles/topic', methods=['POST'])
+def update_articles():
+    db = get_db()
+    topic request.form['topic']
+    articles = parse_news_sources(topic, 5, 50)
+    for article in articles:
+        if article['author']:
+            article['author'] = ', '.join(article['author'].split(','))
+        else:
+            article['author'] = ''
+        db.execute(
+            'INSERT INTO article (headline, body, link, topic, published, author, imglink) VALUES (?, ?, ?, ?, ?, ?, ?)',
+            (article['headline'], article['body'], article['link'], topic,
+             article['published'], article['author'], article['image']))
+        db.commit()
+
+    return Response(status=200)
+
+
 def get_top_news():
     db = get_db()
     headlines = db.execute(
