@@ -70,7 +70,7 @@ def update_articles():
 
 
 @bp.route('/update-articles-topic', methods=['POST'])
-def update_articles():
+def update_articles_topic():
     db = get_db()
     topic = request.form['topic']
     articles = parse_news_sources(topic, 5, 50)
