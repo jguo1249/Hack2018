@@ -3,6 +3,8 @@ from twilio.rest import Client
 
 from ndq.db import (TOPIC_LIST, change_topics, get_attribute, get_topics,
                     set_attribute)
+from ndq.news import get_top_news
+from ndq.user import get_me_link
 
 ###GENERAL INFO###
 account_sid = 'ACd9c542d7461b9e067c58b356354c9e86'
@@ -78,6 +80,8 @@ def process_info(message, number):
 * Change frequency
 * Change delivery time
 * Change topics
+* Get my news
+* Get breaking news
 """, number)
 
         elif ('change' in message
@@ -227,6 +231,15 @@ def process_info(message, number):
                 data += topic + ', '
             data = data[:-2]
             send_data(data, number)
+
+        elif 'breaking' in message and 'news' in message:
+            data = get_top_news()
+            send_data(
+                "Headline: " + data + " http://newsdonequick.online/world",
+                number)
+
+        elif 'news' in message and 'my' in message:
+            send_data("Your news: " + get_me_link(phone), phone)
 
         elif 'unsubscribe' in message:
             set_attribute(number, 'context', 'unsubscribed')

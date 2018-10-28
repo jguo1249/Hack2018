@@ -67,3 +67,10 @@ def update_articles():
             db.commit()
 
     return Response(status=200)
+
+
+def get_top_news():
+    db = get_db()
+    headlines = db.execute(
+        'SELECT headline FROM article ORDER BY published DESC').fetchone()
+    return headlines[0]
