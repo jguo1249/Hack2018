@@ -69,7 +69,7 @@ def update_articles():
     return Response(status=200)
 
 
-@bp.route('/update-articles/topic', methods=['POST'])
+@bp.route('/update-articles-topic', methods=['POST'])
 def update_articles():
     db = get_db()
     topic = request.form['topic']
