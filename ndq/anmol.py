@@ -28,7 +28,10 @@ SOURCES['food'] = [
     'https://www.wsj.com/news/life-arts/food-cooking-drink',
     'https://www.foxnews.com/food-drink'
 ]
-SOURCES['local'] = ['https://www.foxnews.com/search-results/search?q=columbus']
+SOURCES['local'] = [
+    'https://abc6onyourside.com/news/local', 'https://www.10tv.com/local-news',
+    'https://www.10tv.com/categories/ohio-news'
+]
 SOURCES['politics'] = [
     'https://www.cnn.com/politics', 'https://www.nytimes.com/section/politics',
     'https://www.wsj.com/news/politics', 'https://www.foxnews.com/politics'
@@ -55,10 +58,18 @@ SOURCES['world'] = [
     'https://www.wsj.com/news/world', 'https://www.foxnews.com/world'
 ]
 
-TAGS = ['headline', 'article']
-BAD_TAGS = [
-    'video', 'fool', 'comparecards', 'bleacherreport', 'lendingtree', 'tmz'
-]
+TAGS = set()
+TAGS.add('headline')
+TAGS.add('article')
+
+BAD_TAGS = set()
+BAD_TAGS.add('video.foxnews')
+BAD_TAGS.add('fool')
+BAD_TAGS.add('comparecards')
+BAD_TAGS.add('bleacherreport')
+BAD_TAGS.add('lendingtree')
+BAD_TAGS.add('tmz')
+BAD_TAGS.add('foxnews.com/category')
 
 
 ## Parse Article - Helpers
@@ -87,14 +98,6 @@ def summarize(text):
     return result.strip()
 
 
-# Published
-def format_published(date_time):
-    temp = str(date_time)
-    pattern = '%Y-%m-%d %H:%M:%S'
-    epoch = int(time.mktime(time.strptime(temp, pattern)))
-    return epoch
-
-
 # Authors
 def format_authors(authors):
     result = ''
@@ -115,7 +118,7 @@ def parse_article(url, topic):
         result['body'] = summarize(article.text)
         result['link'] = url
         result['topic'] = topic
-        result['published'] = format_published(article.publish_date)
+        result['published'] = article.publish_date
         result['author'] = format_authors(article.authors)
         result['image'] = article.top_image
 
@@ -147,41 +150,56 @@ def get_html(url):
 
 
 # Cluster
-def cluster(urls, number):
-    return urls
+def cluster(articles, num_articles_wanted):
+    return articles
 
 
 ## Parse News Sources
-def parse_news_sources(topic, number):
-    urls = []
+def parse_news_sources(topic, num_articles_wanted, total_articles_to_consider):
+    urls = set()
+    articles_to_consider = total_articles_to_consider / len(SOURCES[topic])
 
     for source in SOURCES[topic]:
         html = get_html(source)
-        soup = BeautifulSoup(html, 'html.parser')
+        soup = BeautifulSoup(html, 'lxml')
+        source_urls = set()
 
         for tag in TAGS:
             regex = re.compile('.*' + tag + '.*', re.IGNORECASE)
 
             for block in soup.find_all(attrs={'class': regex}):
                 for sub_block in block.find_all('a', href=True):
-                    url = sub_block['href']
-                    if url != None:
-                        if 'http' not in url:
-                            url = source[0:source.index('.com') + 4] + url
-                        urls.append(url)
+                    if len(source_urls) < articles_to_consider:
+                        url = sub_block['href']
 
-    def is_valid(url):
-        for tag in BAD_TAGS:
-            if tag in url:
-                return False
-        return True
+                        if url is not None:
+                            if 'http' not in url:
+                                url = source[0:source.index('.com') + 4] + url
 
-    urls[:] = [url for url in urls if is_valid(url)]
-    urls = cluster(urls, number)
+                            if url != source and not any(
+                                    substring in url
+                                    for substring in BAD_TAGS):
+                                source_urls.add(url)
 
-    result = []
+        urls.update(source_urls)
+
+    articles = []
     for url in urls:
         article = parse_article(url, topic)
         if article is not None:
-            result.append(article)
+            articles.append(article)
+
+    result = cluster(articles, num_articles_wanted)
     return result
+
+
+def main():
+    start = time.time()
+    sources = parse_news_sources('local', 5, 50)
+    end = time.time()
+    print(str(end - start) + ' elapsed')
+
+    for source in sources:
+        print(source['link'])
+
+    return

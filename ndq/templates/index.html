@@ -1,10 +1,13 @@
 {% extends "base.html" %}
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 {%block header%}
   <h1>NDQ: News</h1>
 {% endblock %}
 
 {% block content %}
+<link rel="stylesheet" type="text/css" href="../static/index.css">
 
 <form action="/user/signup" method="post">
 
@@ -12,30 +15,57 @@
   <input type = "text" name = "phone" required>
 
   <legend>Choose your topics...</legend>
-  <div>
-    <input type="checkbox" name="topics[]" value="world">
-    <label for="world">World</label>
-
-    <input type="checkbox" name="topics[]" value="local">
-    <label for="local">Local</label>
-
-    <input type="checkbox" name="topics[]" value="sports">
-    <label for="sports">Sports</label>
-
-    <input type="checkbox" name="topics[]" value="science">
-    <label for="science">Science</label>
-
-    <input type="checkbox" name="topics[]" value="food">
-    <label for="food">Food</label>
-
-    <input type="checkbox" name="topics[]" value="entertainment">
-    <label for="entertainment">Entertainment</label>
-
-    <input type="checkbox" name="topics[]" value="politics">
-    <label for="politics">Politics</label>
-
-    <input type="checkbox" name="topics[]" value="technology">
-    <label for="technology">Technology</label>
+  <div class = "topic_select">
+    <div class="ck-button" id="world">
+       <label>
+          <input type="checkbox" name="topics[]" value="world">
+          <span>World</span>
+       </label>
+    </div>
+    <div class="ck-button" id="local">
+       <label>
+          <input type="checkbox" name="topics[]" value="local">
+          <span>Local</span>
+       </label>
+    </div>
+    <div class="ck-button" id="sports">
+       <label>
+          <input type="checkbox" name="topics[]" value="sports">
+          <span>Sports</span>
+       </label>
+    </div>
+    <div class="ck-button" id="science">
+       <label>
+          <input type="checkbox" name="topics[]" value="science">
+          <span>Science</span>
+       </label>
+    </div>
+  </div>
+  <div class="topic_select">
+    <div class="ck-button" id="food">
+       <label>
+          <input type="checkbox" name="topics[]" value="food">
+          <span>Food</span>
+       </label>
+    </div>
+    <div class="ck-button" id="entertainment">
+       <label>
+          <input type="checkbox" name="topics[]" value="entertainment">
+          <span>Entertainment</span>
+       </label>
+    </div>
+    <div class="ck-button" id="politics">
+       <label>
+          <input type="checkbox" name="topics[]" value="politics">
+          <span>Politics</span>
+       </label>
+    </div>
+    <div class="ck-button" id="technology">
+       <label>
+          <input type="checkbox" name="topics[]" value="Technology">
+          <span>Tech</span>
+       </label>
+    </div>
   </div>
 
   <legend>And how often you want the news!</legend>
