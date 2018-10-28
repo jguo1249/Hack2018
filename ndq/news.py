@@ -47,6 +47,10 @@ def index():
 
     articles = db.execute('SELECT * FROM article')
 
+    for article in articles:
+        if article['author']:
+            print()
+
     return render_template('index.html', articles=articles)
 
 
@@ -56,7 +60,10 @@ def update_articles():
     for topic in TOPIC_LIST:
         articles = parse_news_sources(topic, 5, 50)
         for article in articles:
-            print(article['published'], article['author'], article['image'])
+            if article['author']:
+                article['author'] = ', '.join(article['author'].split(','))
+            else:
+                article['author'] = ''
             db.execute(
                 'INSERT INTO article (headline, body, link, topic, published, author, imglink) VALUES (?, ?, ?, ?, ?, ?, ?)',
                 (article['headline'], article['body'], article['link'], topic,

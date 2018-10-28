@@ -2,21 +2,37 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-{%block header%}
-<div class="row">
-  <div class="col-sm-2"></div>
-  <div class="col-sm-8">
-    <br />
-    <h1>News Done Quick</h1>
-    <hr />
-  </div>
-  <div class="col-sm-2"></div>
-</div>
-{% endblock %}
 
 {% block content %}
 <link rel="stylesheet" type="text/css" href="../static/index.css">
 <div class="container">
+
+  {% for article in articles %}
+  {% if loop.first %}
+  <div class="row">
+    <div class="col-lg-2">
+    </div>
+    <div class="col-lg-8">
+      <article class="article">
+        <header>
+          <div>
+            <h2>{{article["headline"]}}</h2>
+            <div class="credits">
+              <a href="{{ article['link'] }}">
+                {% if article['author'] %}
+                by {{ ', '.join(article['author'].split(',')) }}
+                {% endif %}
+              </a>
+            </div>
+          </div>
+        </header>
+        <img src="{{ article['imglink'] }}" class="img-fluid article-img">
+        <p class="body">{{ article['body'] }}</p>
+      </article>
+    </div>
+    <div class="col-lg-2">
+    </div>
+  </div>
   <div class="row">
     <div class="col-lg-3"></div>
     <div class="col-lg-6" align="center">
@@ -124,43 +140,15 @@
     </div>
     <div class="col-lg-3"></div>
   </div>
-
-
-  {% for article in articles %}
-  {% if loop.first %}
-  <div class="row">
-    <div class="col-lg-3">
-    </div>
-    <div class="col-lg-6">
-      <article class="article">
-        <header>
-          <div>
-            <h2>{{article["headline"]}}</h2>
-            <div class="credits">
-              <a href="{{ article['link'] }}">
-                {% if article['author'] %}
-                by {{ article['author'] }}
-                {% endif %}
-              </a>
-            </div>
-          </div>
-        </header>
-        <img src="{{ article['imglink'] }}" class="img-fluid article-img">
-        <p class="body">{{ article['body'] }}</p>
-      </article>
-    </div>
-    <div class="col-lg-3">
-    </div>
-  </div>
   {% endif %}
 
 
 
   {% if not loop.first %}
   <div class="row">
-    <div class="col-lg-3">
+    <div class="col-lg-2">
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-8">
       <article class="article">
         <header>
           <div>
@@ -178,19 +166,19 @@
         <p class="body">{{ article['body'] }}</p>
       </article>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-2">
     </div>
   </div>
   {% endif %}
 
   {% if not loop.last %}
   <div class="row">
-    <div class="col-lg-3">
+    <div class="col-lg-2">
     </div>
-    <div class="col-lg-6">
+    <div class="col-lg-8">
       <hr>
     </div>
-    <div class="col-lg-3">
+    <div class="col-lg-2">
     </div>
   </div>
   {% endif %}

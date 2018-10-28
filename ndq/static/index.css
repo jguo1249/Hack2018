@@ -1,12 +1,3 @@
-* {
-  font-family: Georgia;
-  box-sizing: border-box;
-}
-
-h1 {
-  font-size: 4em;
-}
-
 input[type="text"] {
   padding: 10px;
   width: 94%;

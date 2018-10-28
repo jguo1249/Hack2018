@@ -1,17 +1,30 @@
-body {
-  background-color: white;
-  font-family: serif;
-  font: Georgia;
-  font-weight: 800;
-  font-size: 100%;
-  color: black;
+* {
+  font-family: Georgia;
+  box-sizing: border-box;
 }
+
 h1 {
-  background-color: white;
+  font-size: 4em;
   text-align: center;
-  font-family: serif;
-  font: Georgia;
-  font-weight: 800;
-  font-size: 225%;
-  color: black;
+  display: inline;
+  margin-bottom: 0;
+}
+
+.header-image {
+  height: 4em;
+  display: inline;
+  vertical-align: middle;
+  margin-right: 12px;
+}
+
+#header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.flash {
+  font-size: 1em;
+  margin: 1em;
 }

@@ -1,6 +1,7 @@
 import re
 import string
 import time
+from datetime import *
 
 import nltk
 import requests
@@ -108,9 +109,10 @@ def summarize(text):
 def format_date(date_time):
     if date_time is not None:
         result = str(parser.parse(str(date_time)))
-        return result[0:-6]
     else:
-        return None
+        result = str(parser.parse(str(datetime.now())))[0:-7]
+
+    return result
 
 
 # Authors
