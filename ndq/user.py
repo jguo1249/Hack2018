@@ -1,8 +1,9 @@
 import functools
+import datetime
 
 from flask import Blueprint, Response, g, redirect, request, url_for
 
-from ndq.db import TOPIC_LIST, get_db
+from ndq.db import TOPIC_LIST, get_db, parse_topics
 from ndq.twilio_functions import twilio_signup
 
 bp = Blueprint('user', __name__, url_prefix='/user')
@@ -14,6 +15,7 @@ def signup():
     topics = request.form['topics[]']
     frequency = request.form['frequency']
     firstDelivery = request.form['firstDelivery']
+    firstDelivery = datetime.datetime.now() 
 
     db = get_db()
     error = None
