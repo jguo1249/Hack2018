@@ -207,8 +207,26 @@ def document_distance(a, b):
 
 # Cluster
 def cluster(articles, num_articles_wanted):
+    valid_articles = []
+    for article in articles:
+        if article['headline'] and article['body']:
+            valid_articles.append(article)
 
-    return articles[0:num_articles_wanted]
+    if len(valid_articles) <= num_articles_wanted:
+        return valid_articles
+
+    # pivot = valid_articles[0]
+    #
+    # x = []
+    # for article in valid_articles[1:]:
+    #     x.append(document_distance(pivot['headline'], article['headline']))
+    #
+    #
+    # y = []
+    # for article in valid_articles[1:]
+    #     y.append(document_distance(pivot['body'], article['body']))
+
+    return valid_articles[0:num_articles_wanted]
 
 
 ## Parse News Sources
@@ -263,4 +281,4 @@ def main():
     return
 
 
-main()
+# main()
