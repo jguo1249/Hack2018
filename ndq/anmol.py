@@ -8,8 +8,10 @@ import nltk
 import requests
 from bs4 import BeautifulSoup
 from newspaper import Article
-import time
 import re
+import time
+import string
+from dateutil import parser
 
 SUMMARIZER = Summarizer(Stemmer('english'))
 SUMMARIZER.stop_words = get_stop_words('english')
@@ -70,6 +72,10 @@ BAD_TAGS.add('lendingtree')
 BAD_TAGS.add('tmz')
 BAD_TAGS.add('foxnews.com/category')
 
+# TRANSLATION_TABLE = string.maketrans(
+#     string.punctuation + string.uppercase,
+#     " " * len(string.punctuation) + string.lowercase)
+
 
 ## Parse Article - Helpers
 # Headline
@@ -97,6 +103,15 @@ def summarize(text):
     return result.strip()
 
 
+# Date
+def format_date(date_time):
+    if date_time is not None:
+        result = str(parser.parse(str(date_time)))
+        return result[0:-6]
+    else:
+        return None
+
+
 # Authors
 def format_authors(authors):
     result = ''
@@ -117,7 +132,7 @@ def parse_article(url, topic):
         result['body'] = summarize(article.text)
         result['link'] = url
         result['topic'] = topic
-        result['published'] = article.publish_date
+        result['published'] = format_date(article.publish_date)
         result['author'] = format_authors(article.authors)
         result['image'] = article.top_image
 
@@ -147,9 +162,32 @@ def get_html(url):
     return html or ''
 
 
+# Cluster - Helper
+# def document_distance(a, b):
+# def get_words(text):
+#     text = text.translate(TRANSLATION_TABLE)
+#     word_list = text.split()
+#     return word_list
+#
+# def count_frequency(text):
+#     return
+#
+#
+# a_freq_mapping = {}
+# for new_word in word_list:
+#     if new_word in freq_mapping:
+#         freq_mapping[new_word] = freq_mapping[new_word] + 1
+#     else:
+#         freq_mapping[new_word] = 1
+#
+# numerator = inner_product(D1, D2)
+# denominator = math.sqrt(inner_product(D1, D1) * inner_product(D2, D2))
+# return distance = math.acos(numerator / denominator)
+
+
 # Cluster
 def cluster(articles, num_articles_wanted):
-    return articles
+    return articles[0:num_articles_wanted]
 
 
 ## Parse News Sources
@@ -198,7 +236,8 @@ def main():
     print(str(end - start) + ' elapsed')
 
     for source in sources:
-        print(source['link'])
+        for key in source:
+            print(source[key])
 
     return
 
