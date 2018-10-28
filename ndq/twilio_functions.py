@@ -19,6 +19,7 @@ def has_number(string):
             return i
     return None
 
+
 def no_topics(message):
     for topic in TOPIC_LIST:
         if topic.lower() in message:
@@ -79,10 +80,11 @@ def process_info(message, number):
 * Change topics
 """, number)
 
-        elif ('change' in message or 'set' in message) and 'frequency' in message and (
-                context != 'topics' and context != 'add topic'
-                and context != 'remove topic' and context != 'time'
-                and context != 'summary'):
+        elif ('change' in message
+              or 'set' in message) and 'frequency' in message and (
+                  context != 'topics' and context != 'add topic'
+                  and context != 'remove topic' and context != 'time'
+                  and context != 'summary'):
             send_data(
                 'What would you like the new frequency to be (in hours)?',
                 number)
@@ -95,10 +97,11 @@ def process_info(message, number):
                 ' hours', number)
             set_attribute(number, 'context', '')
 
-        elif ('set' in message or 'change' in message) and 'time' in message and (
-                context != 'topics' and context != 'add topic'
-                and context != 'remove topic' and context != 'frequency'
-                and context != 'summary'):
+        elif ('set' in message
+              or 'change' in message) and 'time' in message and (
+                  context != 'topics' and context != 'add topic'
+                  and context != 'remove topic' and context != 'frequency'
+                  and context != 'summary'):
             send_data('What would you like the new delivery time to be?',
                       number)
             set_attribute(number, 'context', 'time')
@@ -141,7 +144,8 @@ def process_info(message, number):
                       number)
             set_attribute(number, 'context', 'topics')
 
-        elif 'add' in message and context != 'frequency' and context != 'time' and context != 'summary' and context != 'add topic' and no_topics(message):
+        elif 'add' in message and context != 'frequency' and context != 'time' and context != 'summary' and context != 'add topic' and no_topics(
+                message):
             topics_to_add = '''Which of the following topics would you like to add:
 
 '''
@@ -155,7 +159,8 @@ def process_info(message, number):
                 topics_to_add = 'You are currently subscribed to all topics'
             send_data(topics_to_add, number)
 
-        elif 'remove' in message and context != 'frequency' and context != 'time' and context != 'summary' and context != 'remove topic' and no_topics(message):
+        elif 'remove' in message and context != 'frequency' and context != 'time' and context != 'summary' and context != 'remove topic' and no_topics(
+                message):
             topics_to_remove = '''Which of the following topics would you like to remove:
 
 '''
@@ -168,7 +173,9 @@ def process_info(message, number):
                 topics_to_remove = 'You are currently subscribed to zero topics'
             send_data(topics_to_remove, number)
 
-        elif (context == 'remove topic' or 'remove' in message or ('remove' in message and 'topic' in message)) and not(no_topics(message)) :
+        elif (context == 'remove topic' or 'remove' in message or
+              ('remove' in message
+               and 'topic' in message)) and not (no_topics(message)):
             remove_list = []
             for i in TOPIC_LIST:
                 if i.lower() in message:
@@ -187,7 +194,9 @@ def process_info(message, number):
                     "I'm sorry but I don't understand the topics you sent",
                     number)
 
-        elif (context == 'add topic' or 'add' in message or ('add' in message and 'topic' in message)) and not(no_topics(message)):
+        elif (context == 'add topic' or 'add' in message or
+              ('add' in message
+               and 'topic' in message)) and not (no_topics(message)):
             add_list = get_topics(number)
             for i in TOPIC_LIST:
                 if i.lower() in message:
@@ -206,15 +215,18 @@ def process_info(message, number):
                     "I'm sorry but I don't understand the topics you sent",
                     number)
 
-        elif 'settings' in message and ('my' in message or 'current' in message):
+        elif 'settings' in message and ('my' in message
+                                        or 'current' in message):
             data = 'These are your current settings:\n'
-            data += 'Frequency = ' + get_attribute(number,'frequency') + '\n'
-            data += 'Delivery time = ' + "{:d}:{:02d}".format(get_attribute(number,'firstDelivery').hour, get_attribute(number,'firstDelivery').minute)  + '\n'
+            data += 'Frequency = ' + get_attribute(number, 'frequency') + '\n'
+            data += 'Delivery time = ' + "{:d}:{:02d}".format(
+                get_attribute(number, 'firstDelivery').hour,
+                get_attribute(number, 'firstDelivery').minute) + '\n'
             data += 'Topics: '
             for topic in get_topics(number):
                 data += topic + ', '
             data = data[:-2]
-            send_data(data,number)
+            send_data(data, number)
 
         elif 'unsubscribe' in message:
             set_attribute(number, 'context', 'unsubscribed')
