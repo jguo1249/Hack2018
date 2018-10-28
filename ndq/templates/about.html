@@ -1,17 +1,31 @@
 {% extends 'base.html' %}
 
+
 {%block header%}
   <h1>NDQ: About</h1>
 {% endblock %}
 
 {% block content %}
+
+  <link rel="stylesheet" type="text/css" href="../static/about.css">
+
+  <div class="about">
+    <p><p>News in 10 minutes or less. </p></p>
+  </div>
   <div class = "about">
-    <p> News Done Quick (NDQ) was created because the Salty Software team is too lazy to read actual articles.
+    <p> News Done Quick (NDQ) was created because the guys at Salty Software are too lazy to read actual news articles.
         This handy little tool lets you sign up, then sends you a link to a personalized feed of summarized news articles from a
         variety of reputable sources.
         Or, if you don't feel like signing up, just browse the summarized articles (updated every 15 minutes) from the main page.
-        Created with love by
-        <a href = "https://salty.software/">Salty Software</a>
     </p>
+  </div>
+  <div class = "about">
+    <p>Created with love by:</p>
+  </div>
+  <div class="about" id = "salty_picture">
+    <a href = "https://salty.software/">
+      <img class = "salty_logo" src="../static/resources/salty_logo.png">
+      salty software
+    </a>
   </div>
 {% endblock %}
