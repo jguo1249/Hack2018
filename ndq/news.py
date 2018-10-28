@@ -53,9 +53,10 @@ def index():
 @bp.route('/update-articles', methods=['POST'])
 def update_articles():
     db = get_db()
-    local_articles = parse_news_sources('local', 5, 50)
-    for article in local_articles:
-        print(article['published'])
+    topic = 'local'
+    articles = parse_news_sources(topic, 5, 50)
+    for article in articles:
+        print(article['published'], article['author'], article['image'])
         db.execute(
             'INSERT INTO article (headline, body, link, topic, published, author, imglink) VALUES (?, ?, ?, ?, ?, ?, ?)',
             (article['headline'], article['body'], article['link'], topic,
