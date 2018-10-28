@@ -14,10 +14,11 @@ def about():
 @bp.route('/<topic>')
 def topic(topic):
   db = get_db()
+  print(topic)
   articles = db.execute(
     'SELECT * FROM article WHERE topic = ?', (topic,)
   ).fetchall()
-  return render_template('topic.html', articles=articles)
+  return render_template('topic.html', articles=articles, topic = topic.capitalize())
 
 @bp.route('/me')
 def me():
