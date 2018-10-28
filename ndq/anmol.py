@@ -191,15 +191,3 @@ def parse_news_sources(topic, num_articles_wanted, total_articles_to_consider):
 
     result = cluster(articles, num_articles_wanted)
     return result
-
-
-def main():
-    start = time.time()
-    sources = parse_news_sources('local', 5, 50)
-    end = time.time()
-    print(str(end - start) + ' elapsed')
-
-    for source in sources:
-        print(source['link'])
-
-    return
