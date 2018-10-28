@@ -18,6 +18,10 @@
   text-align: center;
   color: black;
   font-size: 150%;
+  margin-top: 2em;
+  font-family: monospace;
+  font: courier;
+  font-weight: 800;
   margin: auto;
   display: block;
   text-decoration: none;
@@ -25,12 +29,4 @@
 .about > a:hover {
   text-shadow: 1px 1px #ff0000;
   color: orange;
-}
-.salty_logo {
-  width: 100%;
-  max-width: 1em;
-  margin-bottom: 0;
-}
-#salty_picture {
-  margin-top: 2em;
 }
