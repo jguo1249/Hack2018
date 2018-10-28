@@ -1,4 +1,5 @@
 import sqlite3
+
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -7,6 +8,10 @@ TOPIC_LIST = set([
     "world", "local", "sports", "science", "food", "entertainment", "politics",
     "technology"
 ])
+
+
+def parse_topics(topics):
+    return {t: t in topics for t in TOPIC_LIST}
 
 
 def init_app(app):
@@ -40,25 +45,41 @@ def init_db():
 
 def get_attribute(phone, attribute):
     db = get_db()
-    query = 'SELECT {} FROM user WHERE phone = {}'.format(attribute, phone)
-    attr = db.execute(query).fetchone()
+    attr = db.execute('SELECT * FROM user WHERE phone = ?',
+                      (phone, )).fetchone()[attribute]
+
     return attr
 
 
-def set_attribute(phone, attribute, value):
-    query = 'UPDATE user SET {} = {} WHERE phone = {}'.format(
-        attribute, value, phone)
+def get_topics(phone):
     db = get_db()
-    db.execute(query)
+    attr = db.execute('SELECT * FROM user WHERE phone = ?',
+                      (phone, )).fetchone()
+    ls = []
+    for col in attr.keys():
+        if attr[col] == 1 and col in TOPIC_LIST:
+            ls.append(col)
+
+    print(ls)
+    return ls
+
+
+def set_attribute(phone, attribute, value):
+    print(phone, attribute, value)
+    db = get_db()
+    db.execute('UPDATE user SET {} = ? WHERE phone = ?'.format(attribute), (
+        value,
+        phone,
+    ))
     db.commit()
 
 
-def change_topics(phone, new_topics):
-    new_topics = parse_topics(new_topics)
+def change_topics(phone, topics):
+    topics = parse_topics(topics)
     db = get_db()
 
     db.execute(
-        'UPDATE user SET (world, local, sports, science, food, entertainment, politics, technology) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ) WHERE phone = ?',  # almost positive this won't work #TODO
+        'UPDATE user SET world = ?, local = ?, sports = ?, science = ?, food = ?, entertainment = ?, politics = ?, technology = ? WHERE phone = ?',
         (topics["world"], topics["local"], topics["sports"], topics["science"],
          topics["food"], topics["entertainment"], topics["politics"],
          topics["technology"], phone))
@@ -69,23 +90,7 @@ def unsubscribe(phone):
     db = get_db()
     db.execute(
         'DELETE user WHERE phone = ?',  # not sure that this will work #TODO
-        (phone))
-    db.commit()
-
-
-def change_frequency(phone, frequency):
-    db = get_db()
-    db.execute(
-        'UPDATE user SET (frequency) VALUES (?) WHERE phone = ?',  # almost positive this won't work #TODO
-        (frequency, phone))
-    db.commit()
-
-
-def change_delivery_time(phone, time):
-    db = get_db()
-    db.execute(
-        'UPDATE user SET (firstDelivery) VALUES (?) WHERE phone = ?',  # almost positive this won't work #TODO
-        (time, phone))
+        (phone, ))
     db.commit()
 
 

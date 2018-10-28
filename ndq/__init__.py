@@ -1,8 +1,10 @@
 import os
 
-from flask import Flask, request, Response
+from flask import Flask, Response, request
 
+from ndq.db import get_db
 from ndq.twilio_functions import process_info
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -27,27 +29,27 @@ def create_app(test_config=None):
 
     @app.route('/god', methods=['POST'])
     def god():
-      if request.method == 'POST':
-        from_number = request.form['From']
-        body = request.form['Body']
-        print(body)
-        try:
-          process_info(body, from_number)
-          return Response(status=200)
-        except:
-          return Response(status=500)
-      else:
-        return Response(status=404)
-
-
+        if request.method == 'POST':
+            from_number = request.form['From']
+            body = request.form['Body']
+            db = get_db()
+            print(body)
+            try:
+                process_info(body, from_number)
+                return Response(status=200)
+            except Exception as e:
+                print(e)
+                return Response(status=500)
+        else:
+            return Response(status=404)
 
     from . import db
-    db.init_app(app) #init db
+    db.init_app(app)  #init db
 
     from . import user
-    app.register_blueprint(user.bp) #create blueprint
+    app.register_blueprint(user.bp)  #create blueprint
 
-    from . import news #news view
+    from . import news  #news view
     app.register_blueprint(news.bp)
     #app.add_url_rule('/', endpoint='index')
 
