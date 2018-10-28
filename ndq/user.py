@@ -15,7 +15,7 @@ def parse_topics(topics):
 
 @bp.route('/signup', methods=['POST'])
 def signup():
-  phone = request.form['phone']
+  phone = '+1' + request.form['phone']
   topics = request.form['topics[]']
   frequency = request.form['frequency']
   firstDelivery = request.form['firstDelivery']
