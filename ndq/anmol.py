@@ -1,10 +1,11 @@
 import re
-import time
 import string
-from dateutil import parser
+import time
+
 import nltk
 import requests
 from bs4 import BeautifulSoup
+from dateutil import parser
 from newspaper import Article
 from sumy.nlp.stemmers import Stemmer
 from sumy.nlp.tokenizers import Tokenizer
