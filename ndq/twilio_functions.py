@@ -238,7 +238,7 @@ def process_info(message, number):
                 number)
 
         elif 'news' in message and 'my' in message:
-            send_data("Your news: " + get_me_link(phone), phone)
+            send_data("Your news: " + get_me_link(number), number)
 
         elif 'unsubscribe' in message:
             set_attribute(number, 'context', 'unsubscribed')
