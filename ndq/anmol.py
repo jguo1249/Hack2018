@@ -207,6 +207,7 @@ def document_distance(a, b):
 
 # Cluster
 def cluster(articles, num_articles_wanted):
+
     return articles[0:num_articles_wanted]
 
 
