@@ -1,7 +1,7 @@
 import functools
 import datetime
 
-from flask import Blueprint, Response, g, redirect, request, url_for
+from flask import Blueprint, Response, flash, g, redirect, request, url_for
 
 from ndq.db import TOPIC_LIST, get_db, parse_topics
 from ndq.twilio_functions import twilio_signup
@@ -38,6 +38,8 @@ def signup():
         twilio_signup(phone)
 
         topic_param = topics
-        return redirect('/me?topics=' + topic_param)
-    else:
-        pass
+        print(topic_param)
+        return redirect(url_for('news.me'), topics=topic_param)
+
+    flash(error)
+    return redirect(url_for('news.index'))

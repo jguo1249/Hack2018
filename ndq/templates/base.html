@@ -2,15 +2,48 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>{% block title %}{% endblock %}News Done Quick!</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-<section
+
 <section class="content">
   <header>
-    {% block header %}{% endblock %}
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-8 d-none d-md-block">
+          <a href="/" id="header-link">
+            <div id="header-container">
+              <img src="{{ url_for('static', filename='resources/dark-logo.png') }}" class="header-image" />
+              <div id="header-divider"></div>
+              <h1>News Done Quick</h1>
+            </div>
+          </a>
+          <hr />
+        </div>
+        <div class="col-sm-8 d-block d-md-none">
+          <a href="/" id="header-link">
+            <div id="header-container">
+              <img src="{{ url_for('static', filename='resources/dark-logo.png') }}" class="header-image" />
+            </div>
+            <hr />
+          </a>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+    </div>
   </header>
   {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
+  <div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4" align="center">
+      <div class="flash">{{ message }}</div>
+      <hr />
+      <br />
+    </div>
+    <div class="col-sm-4"></div>
+  </div>
   {% endfor %}
   {% block content %}
   {% endblock %}
+
 </section>

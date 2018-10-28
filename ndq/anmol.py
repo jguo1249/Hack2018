@@ -1,10 +1,11 @@
+import math
 import re
 import string
 import time
-import math
-import numpy
+from datetime import *
 
 import nltk
+import numpy
 import requests
 from bs4 import BeautifulSoup
 from dateutil import parser
@@ -20,7 +21,7 @@ from sumy.utils import get_stop_words
 SUMMARIZER = Summarizer(Stemmer('english'))
 SUMMARIZER.stop_words = get_stop_words('english')
 
-SENTENCE_COUNT = 8
+SENTENCE_COUNT = 4
 SOURCES = dict()
 SOURCES['entertainment'] = [
     'https://www.cnn.com/entertainment',
@@ -129,7 +130,9 @@ def format_date(date_time):
 
         return result
     else:
-        return None
+        result = str(parser.parse(str(datetime.now())))[0:-7]
+
+    return result
 
 
 # Authors
@@ -310,19 +313,3 @@ def parse_news_sources(topic, num_articles_wanted, total_articles_to_consider):
 
     result = cluster(articles, num_articles_wanted)
     return result
-
-
-def main():
-    start = time.time()
-    sources = parse_news_sources('world', 5, 50)
-    end = time.time()
-    print(str(end - start) + ' elapsed')
-
-    for source in sources:
-        for key in source:
-            print(key + ' - ' + str(source[key]))
-        print("\n")
-    return
-
-
-main()

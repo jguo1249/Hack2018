@@ -1,6 +1,44 @@
-body{ background-color: white;
-      font-family: serif; font: Georgia;
-      font-weight: 800; font-size: 100%; color : black }
-h1 {background-color: white; text-align: center;
-    font-family: serif; font: Georgia;
-    font-weight: 800; font-size: 225%; color : black}
+* {
+  font-family: Georgia;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 4em;
+  text-align: center;
+  display: inline;
+  margin-bottom: 0;
+}
+
+.header-image {
+  height: 4em;
+  display: inline;
+  vertical-align: middle;
+}
+
+#header-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1em;
+  text-decoration: none;
+  color: black;
+}
+
+#header-link:hover {
+  text-decoration: none;
+  color: black;
+}
+
+#header-divider {
+  height: 4em;
+  width: 3px;
+  background-color: black;
+  margin: 16px;
+}
+
+.flash {
+  font-size: 1em;
+  margin: 1em;
+}

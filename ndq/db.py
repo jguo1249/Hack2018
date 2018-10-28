@@ -89,7 +89,7 @@ def change_topics(phone, topics):
 def unsubscribe(phone):
     db = get_db()
     db.execute(
-        'DELETE user WHERE phone = ?',  # not sure that this will work #TODO
+        'DELETE FROM user WHERE phone = ?',  # not sure that this will work #TODO
         (phone, ))
     db.commit()
 
