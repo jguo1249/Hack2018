@@ -84,13 +84,13 @@ TRANSLATION_TABLE = str.maketrans(
 ## Parse Article - Helpers
 # Headline
 def format_headline(headline):
-    return headline.title()
+    return string.capwords(headline)
 
 
 # Summary - Helper
 def clean_sentence(sentence):
     clean_sentence = sentence
-    removal_list = ['•', '\n', '\t', '(CNN)']
+    removal_list = ['•', '\n', '\t', '(CNN)', 'Read More', '_']
     for item in removal_list:
         clean_sentence = clean_sentence.replace(item, '')
     clean_sentence = clean_sentence.strip()
@@ -304,7 +304,8 @@ def main():
     for source in sources:
         for key in source:
             print(key + ' - ' + str(source[key]))
+        print("\n\n")
     return
 
 
-# main()
+main()
