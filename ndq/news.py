@@ -3,7 +3,7 @@ from flask import (Blueprint, Response, flash, g, redirect, render_template,
 from werkzeug.exceptions import abort
 
 from ndq.anmol import parse_news_sources
-from ndq.db import get_db
+from ndq.db import TOPIC_LIST, get_db
 
 bp = Blueprint('news', __name__)
 
@@ -53,15 +53,15 @@ def index():
 @bp.route('/update-articles', methods=['POST'])
 def update_articles():
     db = get_db()
-    topic = 'local'
-    articles = parse_news_sources(topic, 5, 50)
-    for article in articles:
-        print(article['published'], article['author'], article['image'])
-        db.execute(
-            'INSERT INTO article (headline, body, link, topic, published, author, imglink) VALUES (?, ?, ?, ?, ?, ?, ?)',
-            (article['headline'], article['body'], article['link'], topic,
-             article['published'], article['author'], article['image']))
-        db.commit()
+    for topic in TOPIC_LIST:
+        articles = parse_news_sources(topic, 5, 50)
+        for article in articles:
+            print(article['published'], article['author'], article['image'])
+            db.execute(
+                'INSERT INTO article (headline, body, link, topic, published, author, imglink) VALUES (?, ?, ?, ?, ?, ?, ?)',
+                (article['headline'], article['body'], article['link'], topic,
+                 article['published'], article['author'], article['image']))
+            db.commit()
 
     # topic = 'local'
     #

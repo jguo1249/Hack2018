@@ -1,120 +1,131 @@
+* {
+  font-family: Georgia;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 4em;
+}
+
+input[type="text"] {
+  padding: 10px;
+  width: 94%;
+  margin: 3%;
+  font-size: 1.4em;
+}
+
+input[type="submit"] {
+  background-color: #4caf50; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+}
+
+form {
+  margin: 1em;
+}
+
+.body {
+  line-height: 2em;
+  font-size: 1.1em;
+}
+
+.article-img {
+  margin-bottom: 18px;
+  margin-top: 12px;
+}
+
+.hidden {
+  display: none;
+}
 
 .ck-button {
-    margin:4px;
-    background-color:#EFEFEF;
-    border-radius:4px;
-    border-style: solid;
-    overflow:auto;
-    float:left;
+  overflow: hidden;
+  padding: 0;
 }
 
 .ck-button label {
-    float:left;
-    width: 6em;
-    height: 3em;
+  margin: 3%;
+  border-radius: 4px;
+  background-color: #efefef;
+  overflow: hidden;
+  width: 94%;
 }
 
 .ck-button label span {
-    font-size: 95%;
-    text-align:center;
-    padding:1em .05em;
-    display:block;
+  padding: 1em 0;
+  margin: 0;
+  display: block;
 }
-
-.ck-button label input {
-    position:absolute;
-    top:-20px;
-}
-
-.topic_select{
-  border-style: hidden;
-  align-self: center; margin: auto;
-  width: 28em;
-  height:4em;
-}
-
-#world input:checked + span{
+/*
+#world input:checked + span {
   transition: 0.3s;
-  background-color: blue;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#local input:checked + span{
+#local input:checked + span {
   transition: 0.3s;
-  background-color: purple;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#sports input:checked + span{
+#sports input:checked + span {
   transition: 0.3s;
-  background-color: red;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#science input:checked + span{
+#science input:checked + span {
   transition: 0.3s;
-  background-color: gray;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#food input:checked + span{
+#food input:checked + span {
   transition: 0.3s;
-  background-color: #D0E32C;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#entertainment input:checked + span{
+#entertainment input:checked + span {
   transition: 0.3s;
-  background-color: hotpink;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#politics input:checked + span{
+#politics input:checked + span {
   transition: 0.3s;
-  background-color: brown;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
 
-#technology input:checked + span{
+#technology input:checked + span {
   transition: 0.3s;
-  background-color: green;
-  color:#fff;
+  background-color: #2b77b5;
+  color: #fff;
 }
+*/
 
-.phone_legend{
-  font-size: 150%; text-align: center;
-  border-style: hidden;
-  align-self: center; margin: auto;
-  width: 60%;
-}
-
-.topic_select_legend {
-  font-size: 150%; text-align: center;
-  border-style: hidden;
-  align-self: center; margin: auto;
-  width: 60%;
+.ck-button input:checked + span {
+  transition: 0.3s;
+  background-color: #4caf50;
+  color: #fff;
 }
 
 .frequency_select_legend {
-  font-size: 150%; text-align: center;
+  font-size: 150%;
   border-style: hidden;
-  align-self: center; margin: auto;
-  width: 60%;
-}
-
-.frequency_select {
-  align-self: center; margin: auto;
-  width: 5%;
 }
 
 /* Customize the label (the container) */
-.freq_container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  margin-bottom: 12px;
+.radio-container {
   cursor: pointer;
-  font-size: 22px;
+  font-size: 1.3em;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
@@ -122,20 +133,17 @@
 }
 
 /* Hide the browser's default checkbox */
-.freq_container input {
+.radio-container input {
   position: absolute;
   opacity: 0;
   cursor: pointer;
-  font-size:0;
+  font-size: 0;
   height: 0;
   width: 0;
 }
 
-.freq_container {
-  display: inline-block;
-  font-size: 95%;
+.radio-container {
   color: black;
-  align-self: center;
 }
 
 /* Create a custom checkbox */
@@ -149,23 +157,21 @@
 }
 
 /* On mouse-over, add a grey background color */
-.freq_container:hover input ~ .checkmark {
+.radio-container:hover input ~ .checkmark {
   background-color: #ccc;
 }
 
 /* When the checkbox is checked, add a blue background */
-.freq_container input:checked ~ .checkmark {
-  background-color: #2196F3;
+.radio-container input:checked ~ .checkmark {
+  background-color: #4caf50;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .checkmark:after {
-  content: "";
-  position: absolute;
   display: none;
 }
 
 /* Show the checkmark when checked */
-.freq_container input:checked ~ .checkmark:after {
+.radio-container input:checked ~ .checkmark:after {
   display: block;
 }

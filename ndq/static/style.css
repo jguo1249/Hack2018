@@ -1,6 +1,17 @@
-body{ background-color: white;
-      font-family: serif; font: Georgia;
-      font-weight: 800; font-size: 100%; color : black }
-h1 {background-color: white; text-align: center;
-    font-family: serif; font: Georgia;
-    font-weight: 800; font-size: 225%; color : black}
+body {
+  background-color: white;
+  font-family: serif;
+  font: Georgia;
+  font-weight: 800;
+  font-size: 100%;
+  color: black;
+}
+h1 {
+  background-color: white;
+  text-align: center;
+  font-family: serif;
+  font: Georgia;
+  font-weight: 800;
+  font-size: 225%;
+  color: black;
+}
