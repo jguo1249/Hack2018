@@ -17,8 +17,9 @@ def about():
 def topic(topic):
     db = get_db()
     print(topic)
-    articles = db.execute('SELECT * FROM article WHERE topic = ?',
-                          (topic, )).fetchall()
+    articles = db.execute(
+        'SELECT * FROM article WHERE topic = ? ORDER BY published DESC',
+        (topic, )).fetchall()
     print(articles)
     return render_template(
         'topic.html', articles=articles, topic=topic.capitalize())
@@ -44,7 +45,7 @@ def me():
 def index():
     db = get_db()
 
-    articles = db.execute('SELECT * FROM article')
+    articles = db.execute('SELECT * FROM article ORDER BY published DESC')
 
     return render_template('index.html', articles=articles)
 

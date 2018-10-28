@@ -31,6 +31,13 @@ h1 {
   color: black;
 }
 
+#about-link {
+  position: absolute;
+  top: 3%;
+  right: 3%;
+  font-size: 1.2em;
+}
+
 #header-divider {
   height: 4em;
   width: 3px;
