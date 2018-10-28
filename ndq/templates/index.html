@@ -11,15 +11,15 @@
 
 <form action="/user/signup" method="post">
 
-  Phone:
+  <legend class="phone_legend">Enter a phone number: </legend>
   <input type = "text" name = "phone" required>
 
-  <legend>Choose your topics...</legend>
+  <legend class="topic_select_legend">Choose your topics...</legend>
   <div class = "topic_select">
     <div class="ck-button" id="world">
        <label>
           <input type="checkbox" name="topics[]" value="world">
-          <span>World</span>
+          <span id = "">World</span>
        </label>
     </div>
     <div class="ck-button" id="local">
@@ -68,16 +68,22 @@
     </div>
   </div>
 
-  <legend>And how often you want the news!</legend>
-  <div>
-    <input type = "checkbox" name = "frequency" value="8hr">
-    <label for="8hr">every 8 hrs</label>
+  <legend class = "frequency_select_legend">And how often you want the news!</legend>
+  <div class="frequency_select">
+    <label class="freq_container"> 8 hrs
+      <input type="checkbox" name = "frequency" value="8hr">
+      <span class="checkmark"></span>
+    </label>
 
-    <input type = "checkbox" name = "frequency" value="24hr">
-    <label for="24hr">Daily</label>
+    <label class="freq_container"> Daily
+      <input type="checkbox" name = "frequency" value="24hr">
+      <span class="checkmark"></span>
+    </label>
 
-    <input type = "checkbox" name = "frequency" value="168hr">
-    <label for="168hr">Weekly</label>
+    <label class="freq_container"> Weekly
+      <input type="checkbox" name = "frequency" value="168hr">
+      <span class="checkmark"></span>
+    </label>
   </div>
 
   <legend>When do you want your first issue?</legend>
