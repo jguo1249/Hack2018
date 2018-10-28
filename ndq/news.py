@@ -72,7 +72,7 @@ def update_articles():
 @bp.route('/update-articles/topic', methods=['POST'])
 def update_articles():
     db = get_db()
-    topic request.form['topic']
+    topic = request.form['topic']
     articles = parse_news_sources(topic, 5, 50)
     for article in articles:
         if article['author']:
