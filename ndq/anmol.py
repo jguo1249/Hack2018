@@ -1,12 +1,15 @@
 import re
 import string
 import time
+import math
+import numpy
 
 import nltk
 import requests
 from bs4 import BeautifulSoup
 from dateutil import parser
 from newspaper import Article
+from scipy.cluster.vq import kmeans2
 from sumy.nlp.stemmers import Stemmer
 from sumy.nlp.tokenizers import Tokenizer
 from sumy.parsers.html import HtmlParser
@@ -145,8 +148,7 @@ def parse_article(url, topic):
         return result
 
     except Exception as e:
-        print(url + ' failed:')
-        print(e)
+        print(url + ' failed')
         return None
 
 
@@ -197,12 +199,31 @@ def document_distance(a, b):
     b_word_list = get_words(b)
     b_freq_mapping = count_frequency(b_word_list)
 
-    numerator = inner_product(a_freq_mapping, b_freq_mapping)
+    numerator = dot_product(a_freq_mapping, b_freq_mapping)
     denominator = math.sqrt(
-        inner_product(a_freq_mapping, b_freq_mapping) * inner_product(
-            a_freq_mapping, b_freq_mapping))
+        dot_product(a_freq_mapping, a_freq_mapping) * dot_product(
+            b_freq_mapping, b_freq_mapping))
     distance = math.acos(numerator / denominator)
     return distance
+
+
+# Cluster - Helper
+def euclidean_distance(x, y):
+    dx = x[0] - y[0]
+    dy = x[1] - y[1]
+    return math.sqrt((dx * dx) + (dy * dy))
+
+
+# Cluster - Helper
+def nearest_medoid(centroid, data):
+    medoid = data[0]
+    min = euclidean_distance(centroid, medoid)
+    for datum in data[1:]:
+        distance = euclidean_distance(centroid, datum)
+        if distance < min:
+            min = distance
+            medoid = datum
+    return medoid
 
 
 # Cluster
@@ -215,18 +236,24 @@ def cluster(articles, num_articles_wanted):
     if len(valid_articles) <= num_articles_wanted:
         return valid_articles
 
-    # pivot = valid_articles[0]
-    #
-    # x = []
-    # for article in valid_articles[1:]:
-    #     x.append(document_distance(pivot['headline'], article['headline']))
-    #
-    #
-    # y = []
-    # for article in valid_articles[1:]
-    #     y.append(document_distance(pivot['body'], article['body']))
+    data = dict()
+    data_distances = []
+    pivot = valid_articles[0]
 
-    return valid_articles[0:num_articles_wanted]
+    for article in valid_articles[1:]:
+        d1 = document_distance(pivot['headline'], article['headline'])
+        d2 = document_distance(pivot['body'], article['body'])
+        data[(d1, d2)] = article
+        data_distances.append((d1, d2))
+
+    kmeans = kmeans2(data_distances, num_articles_wanted)[0]
+
+    result = []
+    for centroid in kmeans.tolist():
+        medoid = nearest_medoid(tuple(centroid), data_distances)
+        article = data[medoid]
+        result.append(article)
+    return result
 
 
 ## Parse News Sources
@@ -276,9 +303,8 @@ def main():
 
     for source in sources:
         for key in source:
-            print(source[key])
-
+            print(key + ' - ' + str(source[key]))
     return
 
 
-# main()
+main()
