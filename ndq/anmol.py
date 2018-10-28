@@ -1,17 +1,17 @@
-from sumy.parsers.html import HtmlParser
-from sumy.parsers.plaintext import PlaintextParser
-from sumy.nlp.tokenizers import Tokenizer
-from sumy.summarizers.lsa import LsaSummarizer as Summarizer
-from sumy.nlp.stemmers import Stemmer
-from sumy.utils import get_stop_words
-import nltk
-import requests
-from bs4 import BeautifulSoup
-from newspaper import Article
 import re
 import time
 import string
 from dateutil import parser
+import nltk
+import requests
+from bs4 import BeautifulSoup
+from newspaper import Article
+from sumy.nlp.stemmers import Stemmer
+from sumy.nlp.tokenizers import Tokenizer
+from sumy.parsers.html import HtmlParser
+from sumy.parsers.plaintext import PlaintextParser
+from sumy.summarizers.lsa import LsaSummarizer as Summarizer
+from sumy.utils import get_stop_words
 
 SUMMARIZER = Summarizer(Stemmer('english'))
 SUMMARIZER.stop_words = get_stop_words('english')
@@ -139,7 +139,8 @@ def parse_article(url, topic):
         return result
 
     except Exception as e:
-        print(url + ' failed')
+        print(url + ' failed:')
+        print(e)
         return None
 
 
@@ -240,6 +241,3 @@ def main():
             print(source[key])
 
     return
-
-
-main()

@@ -1,4 +1,5 @@
 import sqlite3
+
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
@@ -7,6 +8,10 @@ TOPIC_LIST = set([
     "world", "local", "sports", "science", "food", "entertainment", "politics",
     "technology"
 ])
+
+
+def parse_topics(topics):
+    return {t: t in topics for t in TOPIC_LIST}
 
 
 def init_app(app):
@@ -37,40 +42,44 @@ def init_db():
     with current_app.open_resource('schema.sql') as f:
         db.executescript(f.read().decode('utf8'))
 
-def get_attribute(phone, attribute, db):
-  print(db)
-  print(db == get_db()) # need to test
-  print(db is get_db()) # need to test
-  db.execute('SELECT * FROM user WHERE phone = ?', (phone,))
-  attr = db.fetchone()
-  print(attr)
 
-  return attr
+def get_attribute(phone, attribute):
+    db = get_db()
+    attr = db.execute('SELECT * FROM user WHERE phone = ?',
+                      (phone, )).fetchone()[attribute]
+
+    return attr
+
 
 def get_topics(phone):
-  db = get_db()
-  query = 'SELECT * FROM user WHERE phone = {}'.format(phone)
-  attr = db.execute(query).fetchall()
-  ls = []
-  for cols in attr:
-    if attr[cols] == 'True':
-     ls.append(cols)
-  return ls
+    db = get_db()
+    attr = db.execute('SELECT * FROM user WHERE phone = ?',
+                      (phone, )).fetchone()
+    ls = []
+    for col in attr.keys():
+        if attr[col] == 1 and col in TOPIC_LIST:
+            ls.append(col)
+
+    print(ls)
+    return ls
 
 
 def set_attribute(phone, attribute, value):
-    query = 'UPDATE user SET {} = {} WHERE phone = {}'.format(
-        attribute, value, phone)
+    print(phone, attribute, value)
     db = get_db()
-    db.execute(query)
+    db.execute('UPDATE user SET {} = ? WHERE phone = ?'.format(attribute), (
+        value,
+        phone,
+    ))
     db.commit()
 
-def change_topics(phone, new_topics):
-    new_topics = parse_topics(new_topics)
+
+def change_topics(phone, topics):
+    topics = parse_topics(topics)
     db = get_db()
 
     db.execute(
-        'UPDATE user SET (world, local, sports, science, food, entertainment, politics, technology) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ) WHERE phone = ?',  # almost positive this won't work #TODO
+        'UPDATE user SET world = ?, local = ?, sports = ?, science = ?, food = ?, entertainment = ?, politics = ?, technology = ? WHERE phone = ?',
         (topics["world"], topics["local"], topics["sports"], topics["science"],
          topics["food"], topics["entertainment"], topics["politics"],
          topics["technology"], phone))
@@ -81,7 +90,7 @@ def unsubscribe(phone):
     db = get_db()
     db.execute(
         'DELETE user WHERE phone = ?',  # not sure that this will work #TODO
-        (phone))
+        (phone, ))
     db.commit()
 
 
