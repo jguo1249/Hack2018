@@ -1,5 +1,5 @@
 from flask import (Blueprint, Response, flash, g, redirect, render_template,
-                   request, url_for)
+                   request)
 from werkzeug.exceptions import abort
 
 from ndq.anmol import parse_news_sources
