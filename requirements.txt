@@ -17,7 +17,7 @@ Jinja2==2.10
 lxml==4.2.5
 MarkupSafe==1.0
 newspaper3k==0.2.8
-nltk==3.3
+nltk==3.4.5
 numpy==1.15.3
 Pillow==5.3.0
 PyJWT==1.6.4
