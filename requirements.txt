@@ -19,7 +19,7 @@ MarkupSafe==1.0
 newspaper3k==0.2.8
 nltk==3.3
 numpy==1.15.3
-Pillow==5.3.0
+Pillow==9.3.0
 PyJWT==1.6.4
 PySocks==1.6.8
 python-dateutil==2.7.5
